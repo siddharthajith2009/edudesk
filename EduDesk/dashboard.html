@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - EduDesk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:wght@500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --primary-color: #2D3250;
+      --secondary-color: #F76E11;
+      --accent-color: #FFB84C;
+      --background-light: #F7F7F7;
+      --text-dark: #1A1A2E;
+      --text-light: #666;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--background-light);
+      color: var(--text-dark);
+    }
+
+    .navbar {
+      background: var(--primary-color);
+      color: white;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-md);
+    }
+
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .navbar img {
+      height: 40px;
+    }
+
+    .navbar h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 24px;
+      margin: 0;
+    }
+
+    .navbar .actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .navbar .user-menu {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .navbar .user-menu img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+
+    .navbar .dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      padding: 8px 0;
+      min-width: 200px;
+      display: none;
+    }
+
+    .navbar .dropdown.active {
+      display: block;
+    }
+
+    .navbar .dropdown a {
+      color: var(--text-dark);
+      text-decoration: none;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .navbar .dropdown a:hover {
+      background: var(--background-light);
+      color: var(--secondary-color);
+    }
+
+    .main {
+      padding: 100px 40px 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .welcome-section {
+      margin-bottom: 40px;
+    }
+
+    .welcome-section h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 32px;
+      margin-bottom: 8px;
+      color: var(--text-dark);
+    }
+
+    .welcome-section p {
+      color: var(--text-light);
+      font-size: 16px;
+      max-width: 600px;
+    }
+
+    .categories {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .category {
+      padding: 8px 16px;
+      background: white;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-dark);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .category.active {
+      background: var(--secondary-color);
+      color: white;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      padding: 24px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--secondary-color);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .card h3 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card p {
+      color: var(--text-light);
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .card .icon {
+      width: 40px;
+      height: 40px;
+      background: var(--background-light);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--secondary-color);
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 12px 20px;
+      }
+
+      .main {
+        padding: 80px 20px 20px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .dashboard-header {
+      margin-bottom: 40px;
+    }
+
+    .dashboard-header h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 32px;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+    }
+
+    .dashboard-header p {
+      color: var(--text-light);
+      font-size: 16px;
+    }
+
+    .stats-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-light);
+    }
+
+    @media (max-width: 768px) {
+      .categories {
+        overflow-x: auto;
+        padding-bottom: 8px;
+        margin: 0 -20px 32px;
+        padding: 0 20px;
+      }
+
+      .category {
+        white-space: nowrap;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">
+      <img src="The EDUDESK..png" alt="EduDesk Logo">
+      <h1>EduDesk</h1>
+    </div>
+    <div class="actions">
+      <div class="user-menu">
+        <img id="user-avatar" src="https://ui-avatars.com/api/?name=User&background=random" alt="User Avatar">
+        <div class="dropdown">
+          <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+          <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+          <a href="#" onclick="logout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="welcome-section">
+      <h2 id="welcome-message">Welcome Back!</h2>
+      <p>Manage your academic life efficiently with your personalized tools below.</p>
+      <div id="user-info" style="margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; display: none;">
+        <p><strong>Logged in as:</strong> <span id="user-name"></span></p>
+        <p><strong>Email:</strong> <span id="user-email"></span></p>
+        <button onclick="logout()" style="margin-top: 10px; padding: 5px 15px; background: var(--secondary-color); color: white; border: none; border-radius: 5px; cursor: pointer;">Logout</button>
+      </div>
+    </div>
+
+    <div class="categories">
+      <div class="category active" data-category="all">All Tools</div>
+      <div class="category" data-category="study">Study Tools</div>
+      <div class="category" data-category="wellness">Wellness</div>
+      <div class="category" data-category="organization">Organization</div>
+      <div class="category" data-category="community">Community</div>
+    </div>
+
+    <div class="cards">
+      <div class="card" data-category="organization" onclick="location.href='calendar.html'">
+        <div class="icon"><i class="fas fa-calendar"></i></div>
+        <h3>Calendar View</h3>
+        <p>Check your upcoming classes, assignments, and events in a clear calendar format.</p>
+      </div>
+
+      <div class="card" data-category="wellness" onclick="location.href='diary.html'">
+        <div class="icon"><i class="fas fa-book"></i></div>
+        <h3>Diary Mode</h3>
+        <p>Record your daily activities, reflections, and study routines here.</p>
+      </div>
+
+      <div class="card" data-category="organization" onclick="location.href='wallet.html'">
+        <div class="icon"><i class="fas fa-wallet"></i></div>
+        <h3>Student Documents</h3>
+        <p>Securely upload and access your academic documents, ID cards, and notes.</p>
+      </div>
+
+      <div class="card" data-category="organization" onclick="location.href='alarm.html'">
+        <div class="icon"><i class="fas fa-bell"></i></div>
+        <h3>Alarms & Reminders</h3>
+        <p>Set time-based alerts to stay on track with your tasks and routines.</p>
+      </div>
+
+      <div class="card" data-category="wellness" onclick="location.href='mindfulness.html'">
+        <div class="icon"><i class="fas fa-brain"></i></div>
+        <h3>Mindfulness & Wellness</h3>
+        <p>Practice breathing, read motivational quotes, and refresh your mind.</p>
+      </div>
+
+      <div class="card" data-category="wellness" onclick="location.href='mood-tracker.html'">
+        <div class="icon"><i class="fas fa-smile"></i></div>
+        <h3>Mood Tracker</h3>
+        <p>Pause, reflect, and lift your mood—one step at a time.</p>
+      </div>
+
+      <div class="card" data-category="wellness" onclick="location.href='Journal.html'">
+        <div class="icon"><i class="fas fa-book-open"></i></div>
+        <h3>Anonymous Journal Vault</h3>
+        <p>Capture your thoughts. Reflect on your journey. Unlock clarity, one entry at a time.</p>
+      </div>
+
+      <div class="card" data-category="study" onclick="location.href='study-timer.html'">
+        <div class="icon"><i class="fas fa-clock"></i></div>
+        <h3>Smart Study Timer</h3>
+        <p>Stay focused, study with purpose, and let every minute bring you closer to excellence.</p>
+      </div>
+
+      <div class="card" data-category="community" onclick="location.href='createblog.html'">
+        <div class="icon"><i class="fas fa-pen"></i></div>
+        <h3>Create Blog</h3>
+        <p>Share your thoughts, tips and tricks for the student community!</p>
+      </div>
+
+      <div class="card" data-category="community" onclick="location.href='blogfeed.html'">
+        <div class="icon"><i class="fas fa-glasses"></i></div>
+        <h3>Read Blogs</h3>
+        <p>Listen to what your mentors and teachers want to say!</p>
+      </div>
+
+      <div class="card" data-category="study" onclick="location.href='goalset.html'">
+        <div class="icon"><i class="fas fa-bullseye"></i></div>
+        <h3>Set your Goals</h3>
+        <p>Greatness begins with a single, clearly written goal.</p>
+      </div>
+
+      <div class="card" data-category="organization" onclick="location.href='career-profile.html'">
+        <div class="icon"><i class="fas fa-graduation-cap"></i></div>
+        <h3>Career & Profile Building</h3>
+        <p>Discover your career path with personalized guidance and university recommendations.</p>
+      </div>
+
+      <div class="card" data-category="study" onclick="location.href='prog.html'">
+        <div class="icon"><i class="fas fa-chart-line"></i></div>
+        <h3>Track your Progress</h3>
+        <p>Track every step forward, reflect on your learning journey, and transform your daily efforts into visible growth.</p>
+      </div>
+
+      <div class="card" data-category="study" onclick="location.href='compare.html'">
+        <div class="icon"><i class="fas fa-chart-bar"></i></div>
+        <h3>Goal Progress</h3>
+        <p>Bridge the gap between ambition and achievement.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // User menu dropdown
+    const userMenu = document.querySelector('.user-menu');
+    const dropdown = document.querySelector('.dropdown');
+
+    userMenu.addEventListener('click', () => {
+      dropdown.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!userMenu.contains(e.target)) {
+        dropdown.classList.remove('active');
+      }
+    });
+
+    // Category filtering
+    const categories = document.querySelectorAll('.category');
+    const cards = document.querySelectorAll('.card');
+
+    categories.forEach(category => {
+      category.addEventListener('click', () => {
+        // Remove active class from all categories
+        categories.forEach(c => c.classList.remove('active'));
+        // Add active class to clicked category
+        category.classList.add('active');
+        
+        const selectedCategory = category.getAttribute('data-category');
+        
+        // Filter cards
+        cards.forEach(card => {
+          if (selectedCategory === 'all' || card.getAttribute('data-category') === selectedCategory) {
+            card.style.display = 'block';
+            // Add fade-in animation
+            card.style.opacity = '0';
+            setTimeout(() => {
+              card.style.opacity = '1';
+            }, 50);
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    const completedTasks = localStorage.getItem('completedTasks') || 0;
+    document.querySelector('.stat-value.completed-tasks').textContent = completedTasks;
+  </script>
+
+  <!-- Include API configuration -->
+  <script src="api-config.js"></script>
+  <script>
+    // Check authentication on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!AuthAPI.isLoggedIn()) {
+        alert('Please log in to access the dashboard.');
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      // Display user information
+      const user = AuthAPI.getCurrentUser();
+      if (user) {
+        document.getElementById('welcome-message').textContent = `Welcome Back, ${user.name}!`;
+        document.getElementById('user-name').textContent = user.name;
+        document.getElementById('user-email').textContent = user.email;
+        document.getElementById('user-info').style.display = 'block';
+        
+        // Update avatar with user's name
+        const avatar = document.getElementById('user-avatar');
+        if (avatar) {
+          avatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2D3250&color=fff&size=36`;
+        }
+      }
+    });
+    
+    // Toggle user dropdown
+    function toggleUserDropdown() {
+      const dropdown = document.querySelector('.dropdown');
+      dropdown.classList.toggle('active');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const userMenu = document.querySelector('.user-menu');
+      const dropdown = document.querySelector('.dropdown');
+      
+      if (!userMenu.contains(event.target)) {
+        dropdown.classList.remove('active');
+      }
+    });
+
+    // Add click event to user menu
+    document.querySelector('.user-menu').addEventListener('click', function(e) {
+      e.stopPropagation();
+      toggleUserDropdown();
+    });
+
+    // Logout function
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        AuthAPI.logout();
+      }
+    }
+  </script>
+</body>
+</html>

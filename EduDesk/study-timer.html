@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Study Timer - EduDesk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2D3250;
+            --secondary-color: #F76E11;
+            --accent-color: #FFB84C;
+            --background-light: #F7F7F7;
+            --text-dark: #1A1A2E;
+            --text-light: #666;
+            --success-color: #059669;
+            --warning-color: #D97706;
+            --error-color: #DC2626;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: var(--primary-color);
+            color: white;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-md);
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar img {
+            height: 40px;
+        }
+
+        .navbar h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .main {
+            padding: 100px 40px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .timer-container {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .timer-display {
+            font-size: 72px;
+            font-weight: 600;
+            font-family: 'Fraunces', serif;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        .timer-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .start-button {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .start-button:hover {
+            background: #e05d00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(247, 110, 17, 0.2);
+        }
+
+        .pause-button {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .pause-button:hover {
+            background: #B45309;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
+        }
+
+        .reset-button {
+            background: var(--background-light);
+            color: var(--text-dark);
+        }
+
+        .reset-button:hover {
+            background: #E5E7EB;
+            transform: translateY(-2px);
+        }
+
+        .timer-presets {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .preset-button {
+            padding: 16px;
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            background: transparent;
+            color: var(--primary-color);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .preset-button:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .preset-button.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: var(--text-light);
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .progress-container {
+            margin-top: 40px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #E5E7EB;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--secondary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .session-history {
+            margin-top: 40px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .history-item .date {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .history-item .duration {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .main {
+                padding: 80px 20px 20px;
+            }
+
+            .timer-container {
+                padding: 24px;
+            }
+
+            .timer-display {
+                font-size: 48px;
+            }
+
+            .timer-controls {
+                flex-wrap: wrap;
+            }
+
+            .timer-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="The EDUDESK..png" alt="EduDesk Logo">
+            <h1>EduDesk</h1>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="timer-container">
+            <h2 style="font-family: 'Fraunces', serif; font-size: 32px; margin-bottom: 24px;">Smart Study Timer</h2>
+            <div class="timer-display">25:00</div>
+            
+            <div class="timer-presets">
+                <button class="preset-button active" data-time="25">Pomodoro (25m)</button>
+                <button class="preset-button" data-time="15">Short Break (15m)</button>
+                <button class="preset-button" data-time="45">Long Study (45m)</button>
+                <button class="preset-button" data-time="5">Quick Break (5m)</button>
+            </div>
+
+            <div class="timer-controls">
+                <button class="timer-button start-button">
+                    <i class="fas fa-play"></i>
+                    Start
+                </button>
+                <button class="timer-button pause-button" style="display: none;">
+                    <i class="fas fa-pause"></i>
+                    Pause
+                </button>
+                <button class="timer-button reset-button">
+                    <i class="fas fa-redo"></i>
+                    Reset
+                </button>
+            </div>
+
+            <div class="progress-container">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span>Session Progress</span>
+                    <span>0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>Today's Focus Time</h3>
+                <div class="value">2h 30m</div>
+            </div>
+            <div class="stat-card">
+                <h3>Completed Sessions</h3>
+                <div class="value">6</div>
+            </div>
+            <div class="stat-card">
+                <h3>Weekly Streak</h3>
+                <div class="value">5 days</div>
+            </div>
+        </div>
+
+        <div class="session-history">
+            <h3 style="margin-bottom: 16px;">Recent Sessions</h3>
+            <div class="history-item">
+                <div>
+                    <div style="font-weight: 500;">Pomodoro Session</div>
+                    <div class="date">Today, 2:30 PM</div>
+                </div>
+                <div class="duration">25:00</div>
+            </div>
+            <div class="history-item">
+                <div>
+                    <div style="font-weight: 500;">Short Break</div>
+                    <div class="date">Today, 2:00 PM</div>
+                </div>
+                <div class="duration">15:00</div>
+            </div>
+            <div class="history-item">
+                <div>
+                    <div style="font-weight: 500;">Pomodoro Session</div>
+                    <div class="date">Today, 1:30 PM</div>
+                </div>
+                <div class="duration">25:00</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timeLeft = 25 * 60; // 25 minutes in seconds
+        let timerId = null;
+        let isRunning = false;
+        let sessionType = 'Pomodoro Session';
+        let sessionDuration = 25 * 60;
+
+        const timerDisplay = document.querySelector('.timer-display');
+        const startButton = document.querySelector('.start-button');
+        const pauseButton = document.querySelector('.pause-button');
+        const resetButton = document.querySelector('.reset-button');
+        const presetButtons = document.querySelectorAll('.preset-button');
+        const progressFill = document.querySelector('.progress-fill');
+        const progressText = document.querySelector('.progress-container span:last-child');
+
+        // --- Stats Elements ---
+        const statCards = document.querySelectorAll('.stat-card .value');
+        const sessionHistoryDiv = document.querySelector('.session-history');
+
+        // --- Session Data ---
+        function getSessions() {
+            return JSON.parse(localStorage.getItem('studySessions') || '[]');
+        }
+        function saveSessions(sessions) {
+            localStorage.setItem('studySessions', JSON.stringify(sessions));
+        }
+        function addSession(type, duration) {
+            const sessions = getSessions();
+            sessions.unshift({
+                type,
+                duration,
+                timestamp: new Date().toISOString()
+            });
+            saveSessions(sessions);
+        }
+        function formatDuration(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${m}m${s ? ' ' + s + 's' : ''}`;
+        }
+        function formatDurationHM(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            return `${h ? h + 'h ' : ''}${m}m`;
+        }
+        function formatDateTime(dt) {
+            const d = new Date(dt);
+            const now = new Date();
+            const isToday = d.toDateString() === now.toDateString();
+            const isYesterday = d.toDateString() === new Date(now.setDate(now.getDate()-1)).toDateString();
+            const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            if (isToday) return `Today, ${time}`;
+            if (isYesterday) return `Yesterday, ${time}`;
+            return d.toLocaleString([], { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+        function getStartOfWeek(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Monday as first day
+            return new Date(d.setDate(diff));
+        }
+        function isThisWeek(date) {
+            const now = new Date();
+            const start = getStartOfWeek(now);
+            const end = new Date(start);
+            end.setDate(start.getDate() + 7);
+            return date >= start && date < end;
+        }
+        // --- Render Stats ---
+        function renderStats() {
+            const sessions = getSessions();
+            const now = new Date();
+            // Today's stats
+            const todaySessions = sessions.filter(s => new Date(s.timestamp).toDateString() === now.toDateString());
+            const todayFocus = todaySessions.reduce((sum, s) => sum + s.duration, 0);
+            statCards[0].textContent = todayFocus ? formatDurationHM(todayFocus) : '0m';
+            statCards[1].textContent = todaySessions.length;
+            // Weekly streak
+            const weekSessions = sessions.filter(s => isThisWeek(new Date(s.timestamp)));
+            // Find unique days with at least one session this week
+            const days = new Set(weekSessions.map(s => new Date(s.timestamp).toDateString()));
+            statCards[2].textContent = days.size ? days.size + ' days' : '0 days';
+        }
+        // --- Render Session History ---
+        function renderHistory() {
+            const sessions = getSessions();
+            let html = '<h3 style="margin-bottom: 16px;">Recent Sessions</h3>';
+            if (!sessions.length) {
+                html += '<div style="color:#aaa;text-align:center;">No sessions yet. Start your first study session!</div>';
+            } else {
+                sessions.slice(0, 10).forEach(s => {
+                    html += `<div class="history-item">
+                        <div>
+                            <div style="font-weight: 500;">${s.type}</div>
+                            <div class="date">${formatDateTime(s.timestamp)}</div>
+                        </div>
+                        <div class="duration">${formatDuration(s.duration)}</div>
+                    </div>`;
+                });
+            }
+            sessionHistoryDiv.innerHTML = html;
+        }
+        // --- Timer Logic ---
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            // Update progress
+            const totalTime = parseInt(document.querySelector('.preset-button.active').dataset.time) * 60;
+            const progress = ((totalTime - timeLeft) / totalTime) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}%`;
+        }
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                startButton.style.display = 'none';
+                pauseButton.style.display = 'flex';
+                timerId = setInterval(() => {
+                    timeLeft--;
+                    updateDisplay();
+                    if (timeLeft === 0) {
+                        clearInterval(timerId);
+                        isRunning = false;
+                        startButton.style.display = 'flex';
+                        pauseButton.style.display = 'none';
+                        // Play notification sound
+                        new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3').play();
+                        // Save session
+                        const preset = document.querySelector('.preset-button.active');
+                        const type = preset.textContent.trim();
+                        const duration = parseInt(preset.dataset.time) * 60;
+                        addSession(type, duration);
+                        renderStats();
+                        renderHistory();
+                    }
+                }, 1000);
+            }
+        }
+        function pauseTimer() {
+            if (isRunning) {
+                clearInterval(timerId);
+                isRunning = false;
+                startButton.style.display = 'flex';
+                pauseButton.style.display = 'none';
+            }
+        }
+        function resetTimer() {
+            clearInterval(timerId);
+            isRunning = false;
+            timeLeft = parseInt(document.querySelector('.preset-button.active').dataset.time) * 60;
+            updateDisplay();
+            startButton.style.display = 'flex';
+            pauseButton.style.display = 'none';
+        }
+        presetButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                presetButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                resetTimer();
+            });
+        });
+        startButton.addEventListener('click', startTimer);
+        pauseButton.addEventListener('click', pauseTimer);
+        resetButton.addEventListener('click', resetTimer);
+        // Initialize display and stats
+        updateDisplay();
+        renderStats();
+        renderHistory();
+    </script>
+</body>
+</html> 

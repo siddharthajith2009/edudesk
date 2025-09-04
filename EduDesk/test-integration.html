@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduDesk - Full Integration Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-family: 'Fraunces', serif;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+        .status {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .status h3 {
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .status.success { border-left: 4px solid #4CAF50; }
+        .status.error { border-left: 4px solid #f44336; }
+        .status.warning { border-left: 4px solid #ff9800; }
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+        .btn:hover { background: #45a049; }
+        .btn.secondary { background: #2196F3; }
+        .btn.secondary:hover { background: #1976D2; }
+        .btn.danger { background: #f44336; }
+        .btn.danger:hover { background: #d32f2f; }
+        .user-info {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .form-group input:focus {
+            outline: 2px solid #4CAF50;
+        }
+        .api-response {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 EduDesk Integration Test</h1>
+        
+        <div class="status" id="backend-status">
+            <h3><i class="fas fa-server"></i> Backend Status</h3>
+            <p>Checking Flask backend connection...</p>
+        </div>
+        
+        <div class="status" id="auth-status">
+            <h3><i class="fas fa-user-shield"></i> Authentication Status</h3>
+            <p id="auth-message">Not logged in</p>
+        </div>
+        
+        <div class="user-info" id="user-info">
+            <h3><i class="fas fa-user"></i> User Information</h3>
+            <p><strong>Name:</strong> <span id="user-name"></span></p>
+            <p><strong>Email:</strong> <span id="user-email"></span></p>
+            <p><strong>User ID:</strong> <span id="user-id"></span></p>
+        </div>
+        
+        <div class="status">
+            <h3><i class="fas fa-cogs"></i> API Test Controls</h3>
+            <button class="btn" onclick="testBackend()">Test Backend Connection</button>
+            <button class="btn secondary" onclick="showSignupForm()">Test Signup</button>
+            <button class="btn secondary" onclick="showLoginForm()">Test Login</button>
+            <button class="btn danger" onclick="logout()">Logout</button>
+        </div>
+        
+        <div id="signup-form" style="display: none;">
+            <h3>Test User Registration</h3>
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" id="signup-name" placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="signup-email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="signup-password" placeholder="Enter your password">
+            </div>
+            <button class="btn" onclick="testSignup()">Create Account</button>
+            <button class="btn secondary" onclick="hideForms()">Cancel</button>
+        </div>
+        
+        <div id="login-form" style="display: none;">
+            <h3>Test User Login</h3>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="login-email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="login-password" placeholder="Enter your password">
+            </div>
+            <button class="btn" onclick="testLogin()">Login</button>
+            <button class="btn secondary" onclick="hideForms()">Cancel</button>
+        </div>
+        
+        <div class="status">
+            <h3><i class="fas fa-link"></i> Quick Links</h3>
+            <button class="btn secondary" onclick="window.open('index.html', '_blank')">View Landing Page</button>
+            <button class="btn secondary" onclick="window.open('signup.html', '_blank')">View Signup Page</button>
+            <button class="btn secondary" onclick="window.open('login.html', '_blank')">View Login Page</button>
+            <button class="btn secondary" onclick="window.open('dashboard.html', '_blank')">View Dashboard</button>
+        </div>
+        
+        <div id="api-response" class="api-response" style="display: none;"></div>
+    </div>
+
+    <!-- Include API configuration -->
+    <script src="api-config.js"></script>
+    <script>
+        // Check backend status on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            testBackend();
+            updateAuthStatus();
+        });
+        
+        async function testBackend() {
+            const statusDiv = document.getElementById('backend-status');
+            try {
+                const response = await fetch('http://localhost:5001/api/health');
+                if (response.ok) {
+                    const data = await response.json();
+                    statusDiv.className = 'status success';
+                    statusDiv.innerHTML = `
+                        <h3><i class="fas fa-check-circle"></i> Backend Status</h3>
+                        <p>✅ Flask backend is running successfully!</p>
+                        <p><strong>Status:</strong> ${data.status}</p>
+                        <p><strong>Message:</strong> ${data.message}</p>
+                    `;
+                } else {
+                    throw new Error('Backend not responding');
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = `
+                    <h3><i class="fas fa-exclamation-triangle"></i> Backend Status</h3>
+                    <p>❌ Cannot connect to Flask backend</p>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Make sure to run:</strong> <code>python3 demo_app.py</code> in the backend directory</p>
+                `;
+            }
+        }
+        
+        function updateAuthStatus() {
+            const authDiv = document.getElementById('auth-status');
+            const userInfoDiv = document.getElementById('user-info');
+            
+            if (AuthAPI.isLoggedIn()) {
+                const user = AuthAPI.getCurrentUser();
+                authDiv.className = 'status success';
+                authDiv.innerHTML = `
+                    <h3><i class="fas fa-check-circle"></i> Authentication Status</h3>
+                    <p>✅ User is logged in</p>
+                `;
+                
+                if (user) {
+                    userInfoDiv.style.display = 'block';
+                    document.getElementById('user-name').textContent = user.name;
+                    document.getElementById('user-email').textContent = user.email;
+                    document.getElementById('user-id').textContent = user.id;
+                }
+            } else {
+                authDiv.className = 'status warning';
+                authDiv.innerHTML = `
+                    <h3><i class="fas fa-user-times"></i> Authentication Status</h3>
+                    <p>⚠️ Not logged in</p>
+                `;
+                userInfoDiv.style.display = 'none';
+            }
+        }
+        
+        function showSignupForm() {
+            document.getElementById('signup-form').style.display = 'block';
+            document.getElementById('login-form').style.display = 'none';
+        }
+        
+        function showLoginForm() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('signup-form').style.display = 'none';
+        }
+        
+        function hideForms() {
+            document.getElementById('signup-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'none';
+        }
+        
+        async function testSignup() {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            
+            if (!name || !email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            showApiResponse('Testing signup...');
+            
+            try {
+                const result = await AuthAPI.signup(name, email, password);
+                showApiResponse(JSON.stringify(result, null, 2));
+                
+                if (result.success) {
+                    alert('Signup successful!');
+                    updateAuthStatus();
+                    hideForms();
+                } else {
+                    alert('Signup failed: ' + result.error);
+                }
+            } catch (error) {
+                showApiResponse('Error: ' + error.message);
+                alert('Signup error: ' + error.message);
+            }
+        }
+        
+        async function testLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            showApiResponse('Testing login...');
+            
+            try {
+                const result = await AuthAPI.login(email, password);
+                showApiResponse(JSON.stringify(result, null, 2));
+                
+                if (result.success) {
+                    alert('Login successful!');
+                    updateAuthStatus();
+                    hideForms();
+                } else {
+                    alert('Login failed: ' + result.error);
+                }
+            } catch (error) {
+                showApiResponse('Error: ' + error.message);
+                alert('Login error: ' + error.message);
+            }
+        }
+        
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                AuthAPI.logout();
+                updateAuthStatus();
+                alert('Logged out successfully');
+            }
+        }
+        
+        function showApiResponse(data) {
+            const responseDiv = document.getElementById('api-response');
+            responseDiv.textContent = data;
+            responseDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

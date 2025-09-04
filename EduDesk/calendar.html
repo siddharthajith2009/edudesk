@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendar View - EduDesk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Fraunces:wght@500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css">
+  <style>
+    :root {
+      --primary-color: #2D3250;
+      --secondary-color: #F76E11;
+      --accent-color: #FFB84C;
+      --background-light: #F7F7F7;
+      --background-accent: #FFF4E0;
+      --text-dark: #1A1A2E;
+      --text-light: #4A4A4A;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: var(--background-light);
+      color: var(--text-dark);
+    }
+    .navbar {
+      background: var(--primary-color);
+      color: white;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-md);
+    }
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .navbar img {
+      height: 40px;
+    }
+    .navbar .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+    .navbar .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .navbar .nav-links a:hover {
+      background: var(--secondary-color);
+      color: #fff;
+    }
+    
+    .navbar .nav-links a.dashboard-btn {
+      background: var(--accent-color);
+      color: var(--primary-color);
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .navbar .nav-links a.dashboard-btn:hover {
+      background: #fff;
+      color: var(--primary-color);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    .main {
+      padding: 100px 24px 40px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .calendar-card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: var(--shadow-lg);
+      padding: 32px 24px 24px 24px;
+      margin-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #calendar {
+      width: 100%;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      padding: 16px;
+      margin: 0 auto;
+    }
+    .fc-toolbar-title {
+      font-family: 'Fraunces', serif;
+      color: var(--primary-color);
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .fc-button {
+      background: var(--secondary-color) !important;
+      border: none !important;
+      color: #fff !important;
+      border-radius: 8px !important;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .fc-button:hover, .fc-button:focus {
+      background: var(--accent-color) !important;
+      color: var(--primary-color) !important;
+    }
+    .fc-daygrid-day.fc-day-today {
+      background: var(--background-accent);
+    }
+    .fc-event {
+      background: var(--secondary-color) !important;
+      border: none !important;
+      color: #fff !important;
+      border-radius: 8px !important;
+      font-size: 1rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .fc-event:hover {
+      background: var(--accent-color) !important;
+      color: var(--primary-color) !important;
+    }
+    /* Modal Styles */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(44, 50, 80, 0.18);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-bg.active {
+      display: flex;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: var(--shadow-lg);
+      padding: 40px 32px 48px 32px;
+      min-width: 480px;
+      max-width: 95vw;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      animation: fadeInUp 0.4s;
+      position: relative;
+    }
+    
+    .modal::after {
+      content: '';
+      position: absolute;
+      bottom: 48px;
+      left: 32px;
+      right: 32px;
+      height: 1px;
+      background: #e0e0e0;
+      opacity: 0.3;
+    }
+    .modal h3 {
+      font-family: 'Fraunces', serif;
+      color: var(--primary-color);
+      margin-bottom: 18px;
+      font-size: 1.4rem;
+    }
+    .modal-form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 24px;
+    }
+    .modal label {
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 7px;
+      font-size: 1rem;
+    }
+    .modal input,
+    .modal textarea,
+    .modal select {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 8px;
+      border: 2px solid #e0e0e0;
+      font-size: 1rem;
+      margin-bottom: 0;
+      background: #f8f9fb;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+      height: 48px;
+    }
+    
+    .modal textarea {
+      min-height: 100px;
+      resize: vertical;
+      font-family: 'Inter', sans-serif;
+      height: auto;
+    }
+    .modal input:focus,
+    .modal textarea:focus,
+    .modal select:focus {
+      border-color: var(--secondary-color);
+      outline: none;
+      background: #fff;
+    }
+    .modal textarea {
+      min-height: 100px;
+      resize: vertical;
+      font-family: 'Inter', sans-serif;
+    }
+    .modal-row {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+    .modal-row > div {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .color-picker-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 0;
+    }
+    .color-picker {
+      width: 38px;
+      height: 38px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: var(--secondary-color);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+    #colorValue {
+      font-size: 0.98rem;
+      color: var(--text-light);
+      font-family: monospace;
+      background: #f8f9fb;
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+    }
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 0;
+      margin-top: 24px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+    .checkbox-container input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+      accent-color: var(--secondary-color);
+    }
+    .recurring-divider {
+      height: 1px;
+      background: #ececec;
+      margin: 28px 0 24px 0;
+      border: none;
+    }
+    .recurring-options {
+      display: none;
+      margin-top: 8px;
+      padding: 14px 12px 8px 12px;
+      background: var(--background-accent);
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+    }
+    .recurring-options.show {
+      display: block;
+    }
+    .form-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .form-row input,
+    .form-row select {
+      flex: 1;
+      margin-bottom: 0;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 18px;
+      justify-content: flex-end;
+      margin-top: 32px;
+      padding-top: 16px;
+    }
+    .modal-btn {
+      padding: 12px 32px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      background: var(--secondary-color);
+      color: #fff;
+      transition: background 0.2s, color 0.2s;
+    }
+    .modal-btn.cancel {
+      background: #e0e0e0;
+      color: var(--text-dark);
+    }
+    .modal-btn:hover {
+      background: var(--accent-color);
+      color: var(--primary-color);
+    }
+    @media (max-width: 900px) {
+      .main {
+        padding: 90px 4px 20px 4px;
+      }
+      .calendar-card {
+        padding: 18px 4px 12px 4px;
+      }
+    }
+    @media (max-width: 600px) {
+      .main {
+        padding: 80px 2px 10px 2px;
+      }
+      .calendar-card {
+        padding: 10px 2px 8px 2px;
+      }
+      .modal {
+        min-width: 90vw;
+        padding: 18px 6px 12px 6px;
+      }
+      .modal-row {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">
+      <img src="The EDUDESK..png" alt="EduDesk Logo">
+    </div>
+    <div class="nav-links">
+      <a href="dashboard.html" class="dashboard-btn">Back to Dashboard</a>
+      <a href="study-timer.html">Study Timer</a>
+      <a href="goal-setting.html">Goals</a>
+      <a href="mood-tracker.html">Mood Tracker</a>
+    </div>
+  </div>
+  <div class="main">
+    <div class="calendar-card">
+      <div id="calendar"></div>
+    </div>
+  </div>
+
+  <!-- Modal for adding events -->
+  <div class="modal-bg" id="modalBg">
+    <form class="modal" id="eventForm">
+      <h3>Add Event</h3>
+      <div class="modal-form-group">
+        <label for="eventTitle">Event Title</label>
+        <input type="text" id="eventTitle" required>
+      </div>
+      <div class="modal-form-group">
+        <label for="eventDescription">Description</label>
+        <textarea id="eventDescription" placeholder="Add event description..."></textarea>
+      </div>
+      <div class="modal-row">
+        <div>
+          <label for="eventDate">Date</label>
+          <input type="date" id="eventDate" required>
+        </div>
+        <div>
+          <label for="eventColor">Color</label>
+          <div class="color-picker-container">
+            <input type="color" id="eventColor" class="color-picker" value="#F76E11">
+            <span id="colorValue">#F76E11</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-row">
+        <div>
+          <label for="startTime">Start Time</label>
+          <input type="time" id="startTime" required>
+        </div>
+        <div>
+          <label for="endTime">End Time</label>
+          <input type="time" id="endTime" required>
+        </div>
+      </div>
+      <hr class="recurring-divider">
+      <div class="checkbox-container">
+        <input type="checkbox" id="recurringEvent">
+        <label for="recurringEvent" style="margin:0;">Recurring Event</label>
+      </div>
+      <div class="recurring-options" id="recurringOptions">
+        <label for="recurrenceType">Repeat</label>
+        <select id="recurrenceType">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+          <option value="yearly">Yearly</option>
+        </select>
+        <label for="recurrenceEnd">Until</label>
+        <input type="date" id="recurrenceEnd">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="modal-btn cancel" id="cancelBtn">Cancel</button>
+        <button type="submit" class="modal-btn">Add Event</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script>
+    // Modal logic
+    const modalBg = document.getElementById('modalBg');
+    const eventForm = document.getElementById('eventForm');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const recurringCheckbox = document.getElementById('recurringEvent');
+    const recurringOptions = document.getElementById('recurringOptions');
+    const colorPicker = document.getElementById('eventColor');
+    const colorValue = document.getElementById('colorValue');
+    let calendar, selectedDate, editingEvent;
+
+    function openModal(dateStr) {
+      editingEvent = null;
+      document.getElementById('eventTitle').value = '';
+      document.getElementById('eventDescription').value = '';
+      document.getElementById('eventDate').value = dateStr;
+      document.getElementById('startTime').value = '';
+      document.getElementById('endTime').value = '';
+      document.getElementById('eventColor').value = '#F76E11';
+      colorValue.textContent = '#F76E11';
+      document.getElementById('recurringEvent').checked = false;
+      recurringOptions.classList.remove('show');
+      document.getElementById('recurrenceType').value = 'daily';
+      document.getElementById('recurrenceEnd').value = '';
+      document.querySelector('.modal h3').textContent = 'Add Event';
+      document.querySelector('.modal-actions .modal-btn:last-child').textContent = 'Add Event';
+      modalBg.classList.add('active');
+    }
+    
+    function openEditModal(event) {
+      editingEvent = event;
+      const startDate = new Date(event.start);
+      const endDate = new Date(event.end);
+      
+      document.getElementById('eventTitle').value = event.title;
+      document.getElementById('eventDescription').value = event.extendedProps.description || '';
+      document.getElementById('eventDate').value = startDate.toISOString().split('T')[0];
+      document.getElementById('startTime').value = startDate.toTimeString().slice(0, 5);
+      document.getElementById('endTime').value = endDate.toTimeString().slice(0, 5);
+      document.getElementById('eventColor').value = event.backgroundColor || '#F76E11';
+      colorValue.textContent = event.backgroundColor || '#F76E11';
+      
+      // Handle recurring event properties
+      const isRecurring = event.extendedProps.isRecurring || false;
+      document.getElementById('recurringEvent').checked = isRecurring;
+      if (isRecurring) {
+        recurringOptions.classList.add('show');
+        document.getElementById('recurrenceType').value = event.extendedProps.recurrenceType || 'daily';
+        document.getElementById('recurrenceEnd').value = event.extendedProps.recurrenceEnd || '';
+      } else {
+        recurringOptions.classList.remove('show');
+        document.getElementById('recurrenceType').value = 'daily';
+        document.getElementById('recurrenceEnd').value = '';
+      }
+      
+      document.querySelector('.modal h3').textContent = 'Edit Event';
+      document.querySelector('.modal-actions .modal-btn:last-child').textContent = 'Update Event';
+      modalBg.classList.add('active');
+    }
+    
+    function closeModal() {
+      modalBg.classList.remove('active');
+    }
+    
+    cancelBtn.onclick = closeModal;
+    modalBg.onclick = function(e) { if (e.target === modalBg) closeModal(); };
+
+    // Color picker update
+    colorPicker.addEventListener('input', function() {
+      colorValue.textContent = this.value;
+    });
+
+    // Recurring event toggle
+    recurringCheckbox.addEventListener('change', function() {
+      if (this.checked) {
+        recurringOptions.classList.add('show');
+      } else {
+        recurringOptions.classList.remove('show');
+      }
+    });
+
+    // Calendar logic
+    document.addEventListener('DOMContentLoaded', function () {
+      const calendarEl = document.getElementById('calendar');
+      calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,listWeek'
+        },
+        selectable: true,
+        editable: true,
+        select: function (info) {
+          selectedDate = info.startStr;
+          openModal(selectedDate);
+          calendar.unselect();
+        },
+        eventClick: function (info) {
+          const event = info.event;
+          const action = confirm(`Event: ${event.title}\n\nChoose an action:\n- Click OK to edit\n- Click Cancel to delete`);
+          
+          if (action) {
+            // Edit event
+            openEditModal(event);
+          } else {
+            // Delete event
+            if (confirm(`Delete event: ${event.title}?`)) {
+              event.remove();
+              saveEvents(calendar.getEvents());
+            }
+          }
+        },
+        events: loadEvents()
+      });
+      calendar.render();
+    });
+
+    eventForm.onsubmit = function(e) {
+      e.preventDefault();
+      const title = document.getElementById('eventTitle').value.trim();
+      const description = document.getElementById('eventDescription').value.trim();
+      const date = document.getElementById('eventDate').value;
+      const startTime = document.getElementById('startTime').value;
+      const endTime = document.getElementById('endTime').value;
+      const color = document.getElementById('eventColor').value;
+      const isRecurring = document.getElementById('recurringEvent').checked;
+      const recurrenceType = document.getElementById('recurrenceType').value;
+      const recurrenceEnd = document.getElementById('recurrenceEnd').value;
+      
+      if (!title || !date || !startTime || !endTime) return;
+      
+      const startDateTime = date + 'T' + startTime;
+      const endDateTime = date + 'T' + endTime;
+      
+      // Create base event
+      const baseEvent = {
+        title: title,
+        description: description,
+        start: startDateTime,
+        end: endDateTime,
+        allDay: false,
+        backgroundColor: color,
+        borderColor: color,
+        textColor: '#ffffff',
+        isRecurring: isRecurring,
+        recurrenceType: recurrenceType,
+        recurrenceEnd: recurrenceEnd
+      };
+      
+      if (editingEvent) {
+        // Update existing event
+        editingEvent.setProp('title', title);
+        editingEvent.setExtendedProp('description', description);
+        editingEvent.setStart(startDateTime);
+        editingEvent.setEnd(endDateTime);
+        editingEvent.setProp('backgroundColor', color);
+        editingEvent.setProp('borderColor', color);
+        editingEvent.setExtendedProp('isRecurring', isRecurring);
+        editingEvent.setExtendedProp('recurrenceType', recurrenceType);
+        editingEvent.setExtendedProp('recurrenceEnd', recurrenceEnd);
+      } else {
+        // Add new event
+        if (isRecurring && recurrenceEnd) {
+          // Create recurring events
+          const events = createRecurringEvents(baseEvent, recurrenceType, recurrenceEnd);
+          events.forEach(event => {
+            calendar.addEvent(event);
+          });
+        } else {
+          // Single event
+          calendar.addEvent(baseEvent);
+        }
+      }
+      
+      saveEvents(calendar.getEvents());
+      closeModal();
+    };
+
+    function createRecurringEvents(baseEvent, type, endDate) {
+      const events = [];
+      const startDate = new Date(baseEvent.start);
+      const endRecurrence = new Date(endDate);
+      let currentDate = new Date(startDate);
+      
+      while (currentDate <= endRecurrence) {
+        const eventDate = new Date(currentDate);
+        const event = {
+          ...baseEvent,
+          start: new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate(), 
+                         startDate.getHours(), startDate.getMinutes()).toISOString(),
+          end: new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate(), 
+                       new Date(baseEvent.end).getHours(), new Date(baseEvent.end).getMinutes()).toISOString(),
+          isRecurring: true,
+          recurrenceType: type,
+          recurrenceEnd: endDate
+        };
+        events.push(event);
+        
+        // Move to next occurrence
+        switch (type) {
+          case 'daily':
+            currentDate.setDate(currentDate.getDate() + 1);
+            break;
+          case 'weekly':
+            currentDate.setDate(currentDate.getDate() + 7);
+            break;
+          case 'monthly':
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            break;
+          case 'yearly':
+            currentDate.setFullYear(currentDate.getFullYear() + 1);
+            break;
+        }
+      }
+      
+      return events;
+    }
+
+    function saveEvents(events) {
+      const saved = events.map(e => ({
+        title: e.title,
+        description: e.extendedProps.description || '',
+        start: e.startStr,
+        end: e.endStr,
+        allDay: e.allDay,
+        backgroundColor: e.backgroundColor,
+        borderColor: e.borderColor,
+        textColor: e.textColor,
+        isRecurring: e.extendedProps.isRecurring || false,
+        recurrenceType: e.extendedProps.recurrenceType || '',
+        recurrenceEnd: e.extendedProps.recurrenceEnd || ''
+      }));
+      localStorage.setItem('studentCalendarEvents', JSON.stringify(saved));
+    }
+    
+    function loadEvents() {
+      const saved = localStorage.getItem('studentCalendarEvents');
+      if (!saved) return [];
+      
+      const events = JSON.parse(saved);
+      return events.map(event => ({
+        ...event,
+        extendedProps: {
+          description: event.description || '',
+          isRecurring: event.isRecurring || false,
+          recurrenceType: event.recurrenceType || '',
+          recurrenceEnd: event.recurrenceEnd || ''
+        }
+      }));
+    }
+  </script>
+</body>
+</html>

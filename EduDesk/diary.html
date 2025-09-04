@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diary Mode - EduDesk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Fraunces:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-color: #2D3250;
+      --secondary-color: #F76E11;
+      --accent-color: #FFB84C;
+      --background-light: #F7F7F7;
+      --background-accent: #FFF4E0;
+      --text-dark: #1A1A2E;
+      --text-light: #4A4A4A;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: var(--background-light);
+      color: var(--text-dark);
+    }
+    .navbar {
+      background: var(--primary-color);
+      color: white;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-md);
+    }
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .navbar img {
+      height: 40px;
+    }
+    .navbar .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+    .navbar .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .navbar .nav-links a:hover {
+      background: var(--secondary-color);
+      color: #fff;
+    }
+    
+    .navbar .nav-links a.dashboard-btn {
+      background: var(--accent-color);
+      color: var(--primary-color);
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .navbar .nav-links a.dashboard-btn:hover {
+      background: #fff;
+      color: var(--primary-color);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    .main {
+      padding: 100px 24px 40px 24px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .diary-card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: var(--shadow-lg);
+      padding: 32px 24px 24px 24px;
+      margin-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .diary-header {
+      font-family: 'Fraunces', serif;
+      font-size: 2rem;
+      color: var(--primary-color);
+      font-weight: 700;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    .entries-list {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .entry {
+      background: var(--background-accent);
+      border-left: 6px solid var(--secondary-color);
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .entry-time {
+      font-weight: 600;
+      color: var(--primary-color);
+      font-size: 0.98rem;
+    }
+    .entry-title {
+      color: var(--text-dark);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .entry-desc {
+      color: var(--text-light);
+      font-size: 1rem;
+    }
+    .add-event-btn {
+      background: var(--secondary-color);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: background 0.2s;
+    }
+    .add-event-btn:hover {
+      background: var(--accent-color);
+      color: var(--primary-color);
+    }
+    /* Modal Styles */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(44, 50, 80, 0.18);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-bg.active {
+      display: flex;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: var(--shadow-lg);
+      padding: 32px 24px 24px 24px;
+      min-width: 320px;
+      max-width: 95vw;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      animation: fadeInUp 0.4s;
+    }
+    .modal h3 {
+      font-family: 'Fraunces', serif;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+      font-size: 1.3rem;
+    }
+    .modal label {
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+      font-size: 1rem;
+    }
+    .modal input,
+    .modal textarea,
+    .modal select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 2px solid #e0e0e0;
+      font-size: 1rem;
+      margin-bottom: 10px;
+      background: #f8f9fb;
+      transition: border-color 0.2s;
+    }
+    .modal input:focus,
+    .modal textarea:focus,
+    .modal select:focus {
+      border-color: var(--secondary-color);
+      outline: none;
+      background: #fff;
+    }
+    .modal textarea {
+      min-height: 80px;
+      resize: vertical;
+      font-family: 'Inter', sans-serif;
+    }
+    .color-picker-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .color-picker {
+      width: 50px;
+      height: 40px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: var(--secondary-color);
+    }
+    .recurring-options {
+      display: none;
+      margin-top: 8px;
+      padding: 12px;
+      background: var(--background-accent);
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+    }
+    .recurring-options.show {
+      display: block;
+    }
+    .form-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .form-row input,
+    .form-row select {
+      flex: 1;
+      margin-bottom: 0;
+    }
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .checkbox-container input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+    .modal-btn {
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      background: var(--secondary-color);
+      color: #fff;
+      transition: background 0.2s, color 0.2s;
+    }
+    .modal-btn.cancel {
+      background: #e0e0e0;
+      color: var(--text-dark);
+    }
+    .modal-btn:hover {
+      background: var(--accent-color);
+      color: var(--primary-color);
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 600px) {
+      .main {
+        padding: 80px 2px 10px 2px;
+      }
+      .diary-card {
+        padding: 10px 2px 8px 2px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">
+      <img src="The EDUDESK..png" alt="EduDesk Logo">
+    </div>
+    <div class="nav-links">
+      <a href="dashboard.html" class="dashboard-btn">Back to Dashboard</a>
+      <a href="study-timer.html">Study Timer</a>
+      <a href="goal-setting.html">Goals</a>
+      <a href="mood-tracker.html">Mood Tracker</a>
+    </div>
+  </div>
+  <div class="main">
+    <div class="diary-card">
+      <div class="diary-header">Today's Schedule - { <span id="date"></span> }</div>
+      <button class="add-event-btn" onclick="openModal()">
+        <i class="fas fa-plus"></i> Add Event
+      </button>
+      <div class="entries-list" id="diary-entries"></div>
+    </div>
+  </div>
+
+  <!-- Modal for adding events -->
+  <div class="modal-bg" id="modalBg">
+    <form class="modal" id="eventForm">
+      <h3>Add Event</h3>
+      <label for="eventTitle">Event Title</label>
+      <input type="text" id="eventTitle" required>
+      
+      <label for="eventDescription">Description</label>
+      <textarea id="eventDescription" placeholder="Add event description..."></textarea>
+      
+      <div class="form-row">
+        <div>
+          <label for="eventDate">Date</label>
+          <input type="date" id="eventDate" required>
+        </div>
+        <div>
+          <label for="eventColor">Color</label>
+          <div class="color-picker-container">
+            <input type="color" id="eventColor" class="color-picker" value="#F76E11">
+            <span id="colorValue">#F76E11</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div>
+          <label for="startTime">Start Time</label>
+          <input type="time" id="startTime" required>
+        </div>
+        <div>
+          <label for="endTime">End Time</label>
+          <input type="time" id="endTime" required>
+        </div>
+      </div>
+      
+      <div class="checkbox-container">
+        <input type="checkbox" id="recurringEvent">
+        <label for="recurringEvent">Recurring Event</label>
+      </div>
+      
+      <div class="recurring-options" id="recurringOptions">
+        <label for="recurrenceType">Repeat</label>
+        <select id="recurrenceType">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+          <option value="yearly">Yearly</option>
+        </select>
+        <label for="recurrenceEnd">Until</label>
+        <input type="date" id="recurrenceEnd">
+      </div>
+      
+      <div class="modal-actions">
+        <button type="button" class="modal-btn cancel" id="cancelBtn">Cancel</button>
+        <button type="submit" class="modal-btn">Add Event</button>
+      </div>
+    </form>
+  </div>
+  <script>
+    const diaryContainer = document.getElementById('diary-entries');
+    const todayKey = new Date().toISOString().slice(0, 10);
+    document.getElementById('date').textContent = todayKey;
+
+    // Modal elements
+    const modalBg = document.getElementById('modalBg');
+    const eventForm = document.getElementById('eventForm');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const recurringCheckbox = document.getElementById('recurringEvent');
+    const recurringOptions = document.getElementById('recurringOptions');
+    const colorPicker = document.getElementById('eventColor');
+    const colorValue = document.getElementById('colorValue');
+
+    function openModal() {
+      document.getElementById('eventTitle').value = '';
+      document.getElementById('eventDescription').value = '';
+      document.getElementById('eventDate').value = todayKey;
+      document.getElementById('startTime').value = '';
+      document.getElementById('endTime').value = '';
+      document.getElementById('eventColor').value = '#F76E11';
+      colorValue.textContent = '#F76E11';
+      document.getElementById('recurringEvent').checked = false;
+      recurringOptions.classList.remove('show');
+      document.getElementById('recurrenceType').value = 'daily';
+      document.getElementById('recurrenceEnd').value = '';
+      modalBg.classList.add('active');
+    }
+    
+    function closeModal() {
+      modalBg.classList.remove('active');
+    }
+    
+    cancelBtn.onclick = closeModal;
+    modalBg.onclick = function(e) { if (e.target === modalBg) closeModal(); };
+
+    // Color picker update
+    colorPicker.addEventListener('input', function() {
+      colorValue.textContent = this.value;
+    });
+
+    // Recurring event toggle
+    recurringCheckbox.addEventListener('change', function() {
+      if (this.checked) {
+        recurringOptions.classList.add('show');
+      } else {
+        recurringOptions.classList.remove('show');
+      }
+    });
+
+    function loadEvents() {
+      const saved = JSON.parse(localStorage.getItem('studentCalendarEvents') || '[]');
+      return saved.filter(e => e.start.startsWith(todayKey));
+    }
+    
+    function renderDiary() {
+      diaryContainer.innerHTML = '';
+      const events = loadEvents();
+      if (events.length === 0) {
+        diaryContainer.innerHTML = '<p>No events scheduled for today.</p>';
+        return;
+      }
+      events.sort((a, b) => new Date(a.start) - new Date(b.start));
+      events.forEach(event => {
+        const entryDiv = document.createElement('div');
+        entryDiv.className = 'entry';
+        entryDiv.style.borderLeftColor = event.backgroundColor || event.borderColor || '#F76E11';
+        
+        const timeEl = document.createElement('div');
+        timeEl.className = 'entry-time';
+        const start = new Date(event.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const end = event.end ? new Date(event.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+        timeEl.textContent = end ? `${start} - ${end}` : start;
+        
+        const titleEl = document.createElement('div');
+        titleEl.className = 'entry-title';
+        titleEl.textContent = event.title;
+        
+        entryDiv.appendChild(timeEl);
+        entryDiv.appendChild(titleEl);
+        
+        // Add description if available
+        if (event.description && event.description.trim()) {
+          const descEl = document.createElement('div');
+          descEl.className = 'entry-desc';
+          descEl.textContent = event.description;
+          entryDiv.appendChild(descEl);
+        }
+        // Add reflection section
+        const reflectionKey = `reflection_${event.start}_${event.title}`;
+        const savedReflection = localStorage.getItem(reflectionKey) || '';
+        const reflectionDiv = document.createElement('div');
+        reflectionDiv.className = 'entry-reflection';
+        if (savedReflection) {
+          reflectionDiv.innerHTML = `<strong>Reflection:</strong> <span class='reflection-text'>${savedReflection.replace(/</g,'&lt;')}</span>`;
+        }
+        const reflectBtn = document.createElement('button');
+        reflectBtn.className = 'reflect-btn';
+        reflectBtn.textContent = savedReflection ? 'Edit Reflection' : 'Describe what you did';
+        reflectBtn.onclick = function() {
+          openReflectionModal(event, reflectionKey, savedReflection, reflectionDiv, reflectBtn);
+        };
+        entryDiv.appendChild(reflectionDiv);
+        entryDiv.appendChild(reflectBtn);
+        diaryContainer.appendChild(entryDiv);
+      });
+    }
+
+    // Event form submission
+    eventForm.onsubmit = function(e) {
+      e.preventDefault();
+      const title = document.getElementById('eventTitle').value.trim();
+      const description = document.getElementById('eventDescription').value.trim();
+      const date = document.getElementById('eventDate').value;
+      const startTime = document.getElementById('startTime').value;
+      const endTime = document.getElementById('endTime').value;
+      const color = document.getElementById('eventColor').value;
+      const isRecurring = document.getElementById('recurringEvent').checked;
+      const recurrenceType = document.getElementById('recurrenceType').value;
+      const recurrenceEnd = document.getElementById('recurrenceEnd').value;
+      
+      if (!title || !date || !startTime || !endTime) return;
+      
+      const startDateTime = date + 'T' + startTime;
+      const endDateTime = date + 'T' + endTime;
+      
+      // Create base event
+      const baseEvent = {
+        title: title,
+        description: description,
+        start: startDateTime,
+        end: endDateTime,
+        allDay: false,
+        backgroundColor: color,
+        borderColor: color,
+        textColor: '#ffffff'
+      };
+      
+      // Load existing events
+      const existingEvents = JSON.parse(localStorage.getItem('studentCalendarEvents') || '[]');
+      let newEvents = [];
+      
+      if (isRecurring && recurrenceEnd) {
+        // Create recurring events
+        newEvents = createRecurringEvents(baseEvent, recurrenceType, recurrenceEnd);
+      } else {
+        // Single event
+        newEvents = [baseEvent];
+      }
+      
+      // Add new events to existing ones
+      const allEvents = [...existingEvents, ...newEvents];
+      localStorage.setItem('studentCalendarEvents', JSON.stringify(allEvents));
+      
+      closeModal();
+      renderDiary();
+    };
+
+    function createRecurringEvents(baseEvent, type, endDate) {
+      const events = [];
+      const startDate = new Date(baseEvent.start);
+      const endRecurrence = new Date(endDate);
+      let currentDate = new Date(startDate);
+      
+      while (currentDate <= endRecurrence) {
+        const eventDate = new Date(currentDate);
+        const event = {
+          ...baseEvent,
+          start: new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate(), 
+                         startDate.getHours(), startDate.getMinutes()).toISOString(),
+          end: new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate(), 
+                       new Date(baseEvent.end).getHours(), new Date(baseEvent.end).getMinutes()).toISOString()
+        };
+        events.push(event);
+        
+        // Move to next occurrence
+        switch (type) {
+          case 'daily':
+            currentDate.setDate(currentDate.getDate() + 1);
+            break;
+          case 'weekly':
+            currentDate.setDate(currentDate.getDate() + 7);
+            break;
+          case 'monthly':
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            break;
+          case 'yearly':
+            currentDate.setFullYear(currentDate.getFullYear() + 1);
+            break;
+        }
+      }
+      
+      return events;
+    }
+    
+    renderDiary();
+  </script>
+  <!-- Reflection Modal -->
+  <div class="modal-bg" id="reflectionModalBg">
+    <form class="modal" id="reflectionForm" style="max-width:400px;">
+      <h3>Describe what you did</h3>
+      <textarea id="reflectionText" placeholder="Write your reflection here..." style="min-height:90px;"></textarea>
+      <div class="modal-actions">
+        <button type="button" class="modal-btn cancel" id="reflectionCancelBtn">Cancel</button>
+        <button type="submit" class="modal-btn">Save</button>
+      </div>
+    </form>
+  </div>
+  <style>
+    .reflect-btn {
+      margin-top: 10px;
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .reflect-btn:hover {
+      background: var(--secondary-color);
+      color: #fff;
+    }
+    .entry-reflection {
+      margin-top: 10px;
+      color: var(--text-dark);
+      font-size: 1rem;
+      background: #f8f9fb;
+      border-radius: 8px;
+      padding: 10px 12px;
+      border: 1px solid #ececec;
+    }
+    .reflection-text {
+      color: var(--text-light);
+      font-style: italic;
+    }
+  </style>
+  <script>
+    // Reflection modal logic
+    const reflectionModalBg = document.getElementById('reflectionModalBg');
+    const reflectionForm = document.getElementById('reflectionForm');
+    const reflectionText = document.getElementById('reflectionText');
+    const reflectionCancelBtn = document.getElementById('reflectionCancelBtn');
+    let currentReflectionKey = null;
+    let currentReflectionDiv = null;
+    let currentReflectBtn = null;
+    function openReflectionModal(event, key, existing, reflectionDiv, reflectBtn) {
+      reflectionText.value = existing || '';
+      currentReflectionKey = key;
+      currentReflectionDiv = reflectionDiv;
+      currentReflectBtn = reflectBtn;
+      reflectionModalBg.classList.add('active');
+    }
+    function closeReflectionModal() {
+      reflectionModalBg.classList.remove('active');
+      currentReflectionKey = null;
+      currentReflectionDiv = null;
+      currentReflectBtn = null;
+    }
+    reflectionCancelBtn.onclick = closeReflectionModal;
+    reflectionModalBg.onclick = function(e) { if (e.target === reflectionModalBg) closeReflectionModal(); };
+    reflectionForm.onsubmit = function(e) {
+      e.preventDefault();
+      const value = reflectionText.value.trim();
+      if (currentReflectionKey && currentReflectionDiv && currentReflectBtn) {
+        if (value) {
+          localStorage.setItem(currentReflectionKey, value);
+          currentReflectionDiv.innerHTML = `<strong>Reflection:</strong> <span class='reflection-text'>${value.replace(/</g,'&lt;')}</span>`;
+          currentReflectBtn.textContent = 'Edit Reflection';
+        } else {
+          localStorage.removeItem(currentReflectionKey);
+          currentReflectionDiv.innerHTML = '';
+          currentReflectBtn.textContent = 'Describe what you did';
+        }
+      }
+      closeReflectionModal();
+    };
+  </script>
+</body>
+</html>

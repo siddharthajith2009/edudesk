@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mood Tracker - EduDesk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 2rem;
+      background: #f2f6fc;
+      color: #2c3e50;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .mood-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .mood-button {
+      font-size: 2rem;
+      cursor: pointer;
+      background: #eef2f6;
+      border: none;
+      padding: 1rem;
+      border-radius: 10px;
+      transition: transform 0.2s ease;
+    }
+    .mood-button:hover {
+      transform: scale(1.2);
+      background: #dce6f2;
+    }
+    .log-entry {
+      margin-top: 2rem;
+    }
+    .log-entry h2 {
+      font-size: 1.2rem;
+    }
+    ul {
+      padding-left: 1.5rem;
+    }
+    li {
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+   <nav style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: #0078d4; color: white; font-family: 'Inter', sans-serif;">
+  <div style="font-size: 1.5rem; font-weight: 600;">EduDesk</div>
+  <div>
+    <a href="dashboard.html" style="text-decoration: none; background: white; color: #0078d4; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 500; transition: background 0.3s;">
+      Go to Dashboard
+    </a>
+  </div>
+</nav>
+  <div class="container">
+    <h1>How Are You Feeling Today?</h1>
+    <div class="mood-buttons">
+      <button class="mood-button" onclick="logMood('😀 Happy')">😀</button>
+      <button class="mood-button" onclick="logMood('😐 Neutral')">😐</button>
+      <button class="mood-button" onclick="logMood('😢 Sad')">😢</button>
+      <button class="mood-button" onclick="logMood('😡 Angry')">😡</button>
+      <button class="mood-button" onclick="logMood('😰 Anxious')">😰</button>
+    </div>
+    <div class="log-entry">
+      <h2>Past Mood Logs</h2>
+      <ul id="mood-log"></ul>
+    </div>
+  </div>
+
+  <script>
+    const moodLog = JSON.parse(localStorage.getItem('moodEntries')) || [];
+
+    function logMood(mood) {
+      const entry = `${new Date().toLocaleString()}: ${mood}`;
+      moodLog.unshift(entry);
+      if (moodLog.length > 10) moodLog.pop(); // keep last 10 moods
+      localStorage.setItem('moodEntries', JSON.stringify(moodLog));
+      renderMoodLog();
+    }
+
+    function renderMoodLog() {
+      const list = document.getElementById('mood-log');
+      list.innerHTML = '';
+      moodLog.forEach(entry => {
+        const li = document.createElement('li');
+        li.textContent = entry;
+        list.appendChild(li);
+      });
+    }
+
+    renderMoodLog();
+  </script>
+</body>
+</html>

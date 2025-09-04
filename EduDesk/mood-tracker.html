@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Tracker - EduDesk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #2D3250;
+            --secondary-color: #F76E11;
+            --accent-color: #FFB84C;
+            --background-light: #F7F7F7;
+            --text-dark: #1A1A2E;
+            --text-light: #666;
+            --success-color: #059669;
+            --warning-color: #D97706;
+            --error-color: #DC2626;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: var(--primary-color);
+            color: white;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-md);
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar img {
+            height: 40px;
+        }
+
+        .navbar h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .main {
+            padding: 100px 40px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .mood-container {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 40px;
+        }
+
+        .mood-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .mood-header h2 {
+            font-family: 'Fraunces', serif;
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .mood-header p {
+            color: var(--text-light);
+            font-size: 16px;
+        }
+
+        .mood-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .mood-option {
+            background: var(--background-light);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mood-option:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .mood-option.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .mood-option i {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .mood-option .label {
+            font-weight: 500;
+        }
+
+        .mood-input {
+            margin-bottom: 32px;
+        }
+
+        .mood-input textarea {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 16px;
+            min-height: 120px;
+            resize: vertical;
+            margin-top: 12px;
+        }
+
+        .mood-input textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 4px rgba(247, 110, 17, 0.1);
+        }
+
+        .mood-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .mood-tag {
+            padding: 8px 16px;
+            background: var(--background-light);
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mood-tag:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .mood-tag.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .submit-button {
+            background: var(--secondary-color);
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .submit-button:hover {
+            background: #e05d00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(247, 110, 17, 0.2);
+        }
+
+        .analytics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .analytics-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .analytics-card h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+        }
+
+        .mood-history {
+            margin-top: 40px;
+        }
+
+        .history-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .history-item .date {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .history-item .mood {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .history-item .mood i {
+            font-size: 24px;
+        }
+
+        .history-item .note {
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .main {
+                padding: 80px 20px 20px;
+            }
+
+            .mood-container {
+                padding: 24px;
+            }
+
+            .mood-selector {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="The EDUDESK..png" alt="EduDesk Logo">
+            <h1>EduDesk</h1>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="mood-container">
+            <div class="mood-header">
+                <h2>How are you feeling today?</h2>
+                <p>Track your mood and emotions to better understand your wellbeing</p>
+            </div>
+
+            <div class="mood-selector">
+                <div class="mood-option">
+                    <i class="fas fa-grin-beam"></i>
+                    <div class="label">Happy</div>
+                </div>
+                <div class="mood-option">
+                    <i class="fas fa-meh"></i>
+                    <div class="label">Neutral</div>
+                </div>
+                <div class="mood-option">
+                    <i class="fas fa-sad-tear"></i>
+                    <div class="label">Sad</div>
+                </div>
+                <div class="mood-option">
+                    <i class="fas fa-angry"></i>
+                    <div class="label">Angry</div>
+                </div>
+                <div class="mood-option">
+                    <i class="fas fa-tired"></i>
+                    <div class="label">Tired</div>
+                </div>
+                <div class="mood-option">
+                    <i class="fas fa-stress"></i>
+                    <div class="label">Stressed</div>
+                </div>
+            </div>
+
+            <div class="mood-input">
+                <label>How are you feeling today?</label>
+                <textarea placeholder="Share your thoughts and feelings..."></textarea>
+            </div>
+
+            <div class="mood-tags">
+                <div class="mood-tag">Productive</div>
+                <div class="mood-tag">Focused</div>
+                <div class="mood-tag">Motivated</div>
+                <div class="mood-tag">Anxious</div>
+                <div class="mood-tag">Overwhelmed</div>
+                <div class="mood-tag">Excited</div>
+                <div class="mood-tag">Relaxed</div>
+                <div class="mood-tag">Tired</div>
+            </div>
+
+            <button class="submit-button">Save Mood Entry</button>
+        </div>
+
+        <div class="analytics-container">
+            <div class="analytics-card">
+                <h3>Mood Trends</h3>
+                <canvas id="moodChart"></canvas>
+            </div>
+            <div class="analytics-card">
+                <h3>Weekly Summary</h3>
+                <div style="margin-top: 16px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                        <span>Most Common Mood</span>
+                        <span style="font-weight: 500;">Happy</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                        <span>Average Energy Level</span>
+                        <span style="font-weight: 500;">7.5/10</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Entries This Week</span>
+                        <span style="font-weight: 500;">5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mood-history">
+            <h3 style="margin-bottom: 16px;">Recent Entries</h3>
+            <div class="history-item">
+                <div class="date">Today, 2:30 PM</div>
+                <div class="mood">
+                    <i class="fas fa-grin-beam"></i>
+                    <span>Happy</span>
+                </div>
+                <div class="note">Feeling productive after completing my study goals for the day!</div>
+            </div>
+            <div class="history-item">
+                <div class="date">Yesterday, 6:00 PM</div>
+                <div class="mood">
+                    <i class="fas fa-tired"></i>
+                    <span>Tired</span>
+                </div>
+                <div class="note">Long day of studying, but made good progress.</div>
+            </div>
+            <div class="history-item">
+                <div class="date">Yesterday, 10:00 AM</div>
+                <div class="mood">
+                    <i class="fas fa-meh"></i>
+                    <span>Neutral</span>
+                </div>
+                <div class="note">Starting the day with a clear mind.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Mood Tracker Data Model ---
+        const MOOD_ICONS = {
+            'Happy': 'fa-grin-beam',
+            'Neutral': 'fa-meh',
+            'Sad': 'fa-sad-tear',
+            'Angry': 'fa-angry',
+            'Tired': 'fa-tired',
+            'Stressed': 'fa-stress',
+        };
+        const MOOD_LEVELS = {
+            'Happy': 9,
+            'Neutral': 6,
+            'Sad': 3,
+            'Angry': 2,
+            'Tired': 4,
+            'Stressed': 2,
+        };
+        // --- Utility Functions ---
+        function getEntries() {
+            return JSON.parse(localStorage.getItem('moodEntries') || '[]');
+        }
+        function saveEntries(entries) {
+            localStorage.setItem('moodEntries', JSON.stringify(entries));
+        }
+        function getStartOfWeek(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Monday as first day
+            return new Date(d.setDate(diff));
+        }
+        function isThisWeek(date) {
+            const now = new Date();
+            const start = getStartOfWeek(now);
+            const end = new Date(start);
+            end.setDate(start.getDate() + 7);
+            return date >= start && date < end;
+        }
+        function formatDateTime(dt) {
+            const d = new Date(dt);
+            const now = new Date();
+            const isToday = d.toDateString() === now.toDateString();
+            const isYesterday = d.toDateString() === new Date(now.setDate(now.getDate()-1)).toDateString();
+            const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            if (isToday) return `Today, ${time}`;
+            if (isYesterday) return `Yesterday, ${time}`;
+            return d.toLocaleString([], { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+        // --- Mood Selection ---
+        let selectedMood = null;
+        const moodOptions = document.querySelectorAll('.mood-option');
+        moodOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                moodOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                selectedMood = option.querySelector('.label').textContent;
+            });
+        });
+        // --- Mood Tags ---
+        const moodTags = document.querySelectorAll('.mood-tag');
+        // --- Form Submission ---
+        const submitButton = document.querySelector('.submit-button');
+        submitButton.addEventListener('click', () => {
+            const note = document.querySelector('.mood-input textarea').value.trim();
+            const tags = Array.from(moodTags).filter(tag => tag.classList.contains('active')).map(tag => tag.textContent);
+            if (!selectedMood) {
+                submitButton.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Select a mood!';
+                submitButton.style.background = 'var(--error-color)';
+                setTimeout(() => {
+                    submitButton.innerHTML = 'Save Mood Entry';
+                    submitButton.style.background = 'var(--secondary-color)';
+                }, 2000);
+                return;
+            }
+            const entry = {
+                timestamp: new Date().toISOString(),
+                mood: selectedMood,
+                note,
+                tags
+            };
+            const entries = getEntries();
+            entries.push(entry);
+            saveEntries(entries);
+            renderAll();
+            // Success animation
+            submitButton.innerHTML = '<i class="fas fa-check"></i> Saved!';
+            submitButton.style.background = 'var(--success-color)';
+            setTimeout(() => {
+                submitButton.innerHTML = 'Save Mood Entry';
+                submitButton.style.background = 'var(--secondary-color)';
+            }, 2000);
+            // Reset form
+            moodOptions.forEach(opt => opt.classList.remove('active'));
+            selectedMood = null;
+            document.querySelector('.mood-input textarea').value = '';
+            moodTags.forEach(tag => tag.classList.remove('active'));
+        });
+        moodTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                tag.classList.toggle('active');
+            });
+        });
+        // --- Render Mood Trends Chart ---
+        let moodChart = null;
+        function renderMoodChart(entries) {
+            // Get this week's entries, group by day
+            const now = new Date();
+            const start = getStartOfWeek(now);
+            const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+            const moodByDay = Array(7).fill(null).map(() => []);
+            entries.forEach(e => {
+                const d = new Date(e.timestamp);
+                if (isThisWeek(d)) {
+                    const dayIdx = (d.getDay() + 6) % 7; // Monday=0
+                    moodByDay[dayIdx].push(MOOD_LEVELS[e.mood] || 5);
+                }
+            });
+            const avgMood = moodByDay.map(arr => arr.length ? (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1) : null);
+            // Chart.js
+            if (moodChart) moodChart.destroy();
+            const ctx = document.getElementById('moodChart').getContext('2d');
+            moodChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: days,
+                    datasets: [{
+                        label: 'Mood Level',
+                        data: avgMood,
+                        borderColor: '#F76E11',
+                        backgroundColor: 'rgba(247, 110, 17, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        spanGaps: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, max: 10 } }
+                }
+            });
+        }
+        // --- Render Weekly Summary ---
+        function renderSummary(entries) {
+            const now = new Date();
+            const weekEntries = entries.filter(e => isThisWeek(new Date(e.timestamp)));
+            // Most common mood
+            const moodCounts = {};
+            weekEntries.forEach(e => { moodCounts[e.mood] = (moodCounts[e.mood]||0)+1; });
+            let mostCommonMood = '-';
+            if (Object.keys(moodCounts).length) {
+                mostCommonMood = Object.entries(moodCounts).sort((a,b)=>b[1]-a[1])[0][0];
+            }
+            // Average mood level
+            const avgMood = weekEntries.length ? (weekEntries.reduce((sum,e)=>sum+(MOOD_LEVELS[e.mood]||5),0)/weekEntries.length).toFixed(1) : '-';
+            // Entry count
+            const entryCount = weekEntries.length;
+            // Render
+            const summaryCard = document.querySelectorAll('.analytics-card')[1];
+            summaryCard.innerHTML = `
+                <h3>Weekly Summary</h3>
+                <div style="margin-top: 16px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                        <span>Most Common Mood</span>
+                        <span style="font-weight: 500;">${mostCommonMood}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                        <span>Average Mood Level</span>
+                        <span style="font-weight: 500;">${avgMood === '-' ? '-' : avgMood + '/10'}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Entries This Week</span>
+                        <span style="font-weight: 500;">${entryCount}</span>
+                    </div>
+                </div>
+            `;
+        }
+        // --- Render Recent Entries ---
+        function renderHistory(entries) {
+            const historyDiv = document.querySelector('.mood-history');
+            historyDiv.innerHTML = '<h3 style="margin-bottom: 16px;">Recent Entries</h3>';
+            if (!entries.length) {
+                historyDiv.innerHTML += '<div style="color:#aaa;text-align:center;">No entries yet. Start tracking your mood!</div>';
+                return;
+            }
+            // Sort by timestamp descending
+            const sorted = [...entries].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+            sorted.slice(0,10).forEach(entry => {
+                const icon = MOOD_ICONS[entry.mood] || 'fa-question-circle';
+                const dateStr = formatDateTime(entry.timestamp);
+                const tags = entry.tags && entry.tags.length ? `<div style="margin:8px 0 0 0; color:#F76E11; font-size:13px;">${entry.tags.map(t=>`#${t}`).join(' ')}</div>` : '';
+                historyDiv.innerHTML += `
+                    <div class="history-item">
+                        <div class="date">${dateStr}</div>
+                        <div class="mood">
+                            <i class="fas ${icon}"></i>
+                            <span>${entry.mood}</span>
+                        </div>
+                        <div class="note">${entry.note ? entry.note : '<span style=\'color:#bbb\'>(No note)</span>'}</div>
+                        ${tags}
+                    </div>
+                `;
+            });
+        }
+        // --- Render All ---
+        function renderAll() {
+            const entries = getEntries();
+            renderMoodChart(entries);
+            renderSummary(entries);
+            renderHistory(entries);
+        }
+        // --- Initial Render ---
+        renderAll();
+    </script>
+</body>
+</html> 

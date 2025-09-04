@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Blog - EduDesk</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #2d3151;
+      --accent: #ffe066;
+      --background: #f4f6f9;
+      --card-bg: #fff;
+      --text: #2c3e50;
+      --secondary: #0078d4;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      margin: 0;
+      min-height: 100vh;
+    }
+    .navbar {
+      background: var(--primary);
+      width: 100%;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+    }
+    .navbar-logo {
+      height: 44px;
+      width: 44px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      border: 1px solid #eee;
+      margin: 0.5rem 0;
+    }
+    .navbar-links {
+      display: flex;
+      gap: 2.2rem;
+      align-items: center;
+    }
+    .navbar-link {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      letter-spacing: 0.01em;
+    }
+    .navbar-link:hover {
+      color: var(--accent);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .navbar-link.dashboard-btn {
+      background: var(--accent);
+      color: var(--primary);
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .navbar-link.dashboard-btn:hover {
+      background: #fff;
+      color: var(--primary);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    @media (max-width: 700px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 0.3rem;
+        min-height: unset;
+      }
+      .navbar-links {
+        gap: 1.2rem;
+        margin-top: 0.5rem;
+      }
+      .navbar-logo {
+        height: 32px;
+        width: 32px;
+      }
+    }
+    .blog-form-container {
+      max-width: 520px;
+      margin: 2.5rem auto 0 auto;
+      background: var(--card-bg);
+      padding: 2rem 1.5rem 1.5rem 1.5rem;
+      border-radius: 18px;
+      box-shadow: 0 4px 14px rgba(44,49,80,0.10);
+    }
+    .blog-form-container h1 {
+      color: var(--primary);
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 1.2rem;
+      margin-bottom: 0.3rem;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 8px;
+      border: 1.5px solid #e0e0e0;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: var(--text);
+      transition: border 0.2s;
+    }
+    input:focus, textarea:focus {
+      border: 1.5px solid var(--accent);
+      outline: none;
+    }
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    button {
+      margin-top: 2rem;
+      padding: 0.8rem 1.5rem;
+      background-color: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #005ea2;
+    }
+    .nav-link {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .nav-link a {
+      color: var(--secondary);
+      text-decoration: underline;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <img src="The EDUDESK..png" alt="EduDesk Logo" class="navbar-logo" />
+    <div class="navbar-links">
+      <a href="dashboard.html" class="navbar-link dashboard-btn">Back to Dashboard</a>
+      <a href="blogfeed.html" class="navbar-link">Blog Feed</a>
+    </div>
+  </nav>
+  <div class="blog-form-container">
+    <h1>Create a New Blog</h1>
+    <form id="blogForm">
+      <label for="author">Your Name</label>
+      <input type="text" id="author" name="author" required>
+      <label for="title">Blog Title</label>
+      <input type="text" id="title" name="title" required>
+      <label for="content">Blog Content</label>
+      <textarea id="content" name="content" rows="8" required></textarea>
+      <button type="submit">Publish Blog</button>
+    </form>
+    <div class="nav-link">
+      <p><a href="blogfeed.html">View All Blogs</a></p>
+    </div>
+  </div>
+  <script>
+    // List of bad words (expand as needed)
+    const BAD_WORDS = ["badword1", "badword2", "badword3"];
+    function findBadWords(text) {
+      const regex = new RegExp(`\\b(${BAD_WORDS.join('|')})\\b`, 'gi');
+      return text.match(regex) || [];
+    }
+    function crossOutBadWords(text) {
+      const regex = new RegExp(`\\b(${BAD_WORDS.join('|')})\\b`, 'gi');
+      return text.replace(regex, '<span style="text-decoration: line-through; color: red;">$1</span>');
+    }
+    // Live preview of crossed-out bad words
+    const contentInput = document.getElementById("content");
+    const previewDiv = document.createElement('div');
+    previewDiv.style.marginTop = '0.5rem';
+    previewDiv.style.minHeight = '24px';
+    contentInput.parentNode.insertBefore(previewDiv, contentInput.nextSibling);
+    contentInput.addEventListener('input', function() {
+      previewDiv.innerHTML = crossOutBadWords(contentInput.value);
+    });
+    document.getElementById("blogForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const author = document.getElementById("author").value.trim();
+      const title = document.getElementById("title").value.trim();
+      const content = document.getElementById("content").value.trim();
+      if (!author || !title || !content) {
+        alert("Please enter your name, a title, and content.");
+        return;
+      }
+      const badWords = findBadWords(content);
+      if (badWords.length > 0) {
+        alert("Your blog contains inappropriate content and cannot be published. Please remove the following: " + badWords.join(", "));
+        return;
+      }
+      const newBlog = {
+        author,
+        title,
+        content,
+        timestamp: new Date().toISOString()
+      };
+      const blogs = JSON.parse(localStorage.getItem("blogs")) || [];
+      blogs.push(newBlog);
+      localStorage.setItem("blogs", JSON.stringify(blogs));
+      // Clear form after submission
+      document.getElementById("author").value = "";
+      document.getElementById("title").value = "";
+      document.getElementById("content").value = "";
+      previewDiv.innerHTML = '';
+      // Redirect or notify user
+      alert("Blog published successfully!");
+      window.location.href = "blogfeed.html";
+    });
+  </script>
+</body>
+</html>

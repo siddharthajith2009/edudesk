@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Anonymous Journal Vault - EduDesk</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #2d3151;
+      --accent: #ffe066;
+      --background: #f5f7fa;
+      --card-bg: #fff;
+      --text: #2c3e50;
+      --secondary: #4CAF50;
+      --danger: #dc3545;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      margin: 0;
+      min-height: 100vh;
+    }
+    .navbar {
+      background: var(--primary);
+      width: 100%;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+    }
+    .navbar-logo {
+      height: 44px;
+      width: 44px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      border: 1px solid #eee;
+      margin: 0.5rem 0;
+    }
+    .navbar-links {
+      display: flex;
+      gap: 2.2rem;
+      align-items: center;
+    }
+    .navbar-link {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      letter-spacing: 0.01em;
+    }
+    .navbar-link:hover {
+      color: var(--accent);
+    }
+    @media (max-width: 700px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 0.3rem;
+        min-height: unset;
+      }
+      .navbar-links {
+        gap: 1.2rem;
+        margin-top: 0.5rem;
+      }
+      .navbar-logo {
+        height: 32px;
+        width: 32px;
+      }
+    }
+    .vault {
+      max-width: 520px;
+      margin: 2.5rem auto 0 auto;
+      background: var(--card-bg);
+      padding: 2rem 1.5rem 1.5rem 1.5rem;
+      border-radius: 18px;
+      box-shadow: 0 4px 14px rgba(44,49,80,0.10);
+    }
+    .vault h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+    .vault input[type="password"], .vault select, .vault textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 8px;
+      border: 1.5px solid #e0e0e0;
+      font-size: 1rem;
+      margin-top: 1rem;
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: var(--text);
+      transition: border 0.2s;
+    }
+    .vault textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    .vault input[type="password"]:focus, .vault select:focus, .vault textarea:focus {
+      border: 1.5px solid var(--accent);
+      outline: none;
+    }
+    .vault button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      margin-top: 1.2rem;
+      width: 100%;
+      border-radius: 8px;
+      border: none;
+      background: var(--secondary);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .vault button:hover {
+      background: #388e3c;
+    }
+    .lock-btn {
+      background: var(--danger);
+      margin-top: 0.5rem;
+    }
+    .lock-btn:hover {
+      background: #a71d2a;
+    }
+    .message {
+      margin-top: 1rem;
+      font-style: italic;
+      color: #777;
+      font-size: 0.98rem;
+    }
+    .entries-list {
+      margin-top: 2rem;
+      max-height: 260px;
+      overflow-y: auto;
+      border-top: 1px solid #eee;
+      padding-top: 1.2rem;
+    }
+    .entry {
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.1rem;
+      box-shadow: 0 1px 4px rgba(44,49,80,0.04);
+    }
+    .entry .entry-date {
+      color: #888;
+      font-size: 0.95rem;
+      margin-bottom: 0.3rem;
+    }
+    .entry .entry-mood {
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+    }
+    .entry .entry-text {
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    @media (max-width: 600px) {
+      .vault {
+        padding: 1.2rem 0.5rem 1rem 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <img src="The EDUDESK..png" alt="EduDesk Logo" class="navbar-logo" />
+    <div class="navbar-links">
+      <a href="dashboard.html" class="navbar-link">Dashboard</a>
+      <a href="study-timer.html" class="navbar-link">Study Timer</a>
+      <a href="goalset.html" class="navbar-link">Goals</a>
+      <a href="mood-tracker.html" class="navbar-link">Mood Tracker</a>
+    </div>
+  </nav>
+  <div class="vault">
+    <h2>📝 Anonymous Journal Vault</h2>
+    <div id="password-section">
+      <input type="password" id="vault-password" placeholder="Enter your password to access">
+      <button onclick="unlockVault()">Unlock</button>
+    </div>
+    <div id="journal-section" style="display: none;">
+      <label for="mood">Mood:</label>
+      <select id="mood">
+        <option>🙂 Happy</option>
+        <option>😐 Neutral</option>
+        <option>😔 Sad</option>
+        <option>😡 Angry</option>
+        <option>😰 Anxious</option>
+      </select>
+      <textarea id="journal" placeholder="Type your thoughts here..."></textarea>
+      <div class="message" id="autosave-status">Auto-saved</div>
+      <button onclick="saveEntry()">Save Entry</button>
+      <button class="lock-btn" onclick="lockVault()">Lock Vault</button>
+      <div class="entries-list" id="entries-list"></div>
+    </div>
+  </div>
+  <script>
+    // --- Simple base64 encode/decode for demo (not secure for real use!) ---
+    function encode(str) { return btoa(unescape(encodeURIComponent(str))); }
+    function decode(str) { return decodeURIComponent(escape(atob(str))); }
+    // --- Vault logic ---
+    let vaultKey = null;
+    function unlockVault() {
+      const inputPass = document.getElementById("vault-password").value;
+      if (!inputPass) return alert("Please enter a password.");
+      let storedPass = localStorage.getItem("vault_password");
+      if (!storedPass) {
+        // First-time password
+        localStorage.setItem("vault_password", encode(inputPass));
+        vaultKey = inputPass;
+        showJournal();
+      } else if (encode(inputPass) === storedPass) {
+        vaultKey = inputPass;
+        showJournal();
+      } else {
+        alert("Incorrect password.");
+      }
+    }
+    function lockVault() {
+      vaultKey = null;
+      document.getElementById("journal-section").style.display = "none";
+      document.getElementById("password-section").style.display = "block";
+      document.getElementById("vault-password").value = "";
+    }
+    // --- Journal logic ---
+    const journalArea = document.getElementById("journal");
+    const moodSelect = document.getElementById("mood");
+    const autosaveStatus = document.getElementById("autosave-status");
+    const entriesList = document.getElementById("entries-list");
+    function getVaultEntries() {
+      if (!vaultKey) return [];
+      const raw = localStorage.getItem("journal_entries_" + encode(vaultKey));
+      if (!raw) return [];
+      try {
+        return JSON.parse(decode(raw));
+      } catch {
+        return [];
+      }
+    }
+    function saveVaultEntries(entries) {
+      if (!vaultKey) return;
+      localStorage.setItem("journal_entries_" + encode(vaultKey), encode(JSON.stringify(entries)));
+    }
+    function showJournal() {
+      document.getElementById("password-section").style.display = "none";
+      document.getElementById("journal-section").style.display = "block";
+      // Reset form
+      journalArea.value = "";
+      moodSelect.value = "🙂 Happy";
+      autosaveStatus.textContent = "Auto-saved";
+      renderEntries();
+    }
+    // Auto-save
+    journalArea.addEventListener("input", () => {
+      autosaveStatus.textContent = "Auto-saved at " + new Date().toLocaleTimeString();
+    });
+    // Save entry
+    function saveEntry() {
+      if (!vaultKey) return;
+      const text = journalArea.value.trim();
+      const mood = moodSelect.value;
+      if (!text) {
+        autosaveStatus.textContent = "Cannot save empty entry.";
+        return;
+      }
+      const entries = getVaultEntries();
+      entries.unshift({
+        text,
+        mood,
+        date: new Date().toISOString()
+      });
+      saveVaultEntries(entries);
+      autosaveStatus.textContent = "Saved at " + new Date().toLocaleTimeString();
+      journalArea.value = "";
+      renderEntries();
+    }
+    // Render previous entries
+    function renderEntries() {
+      const entries = getVaultEntries();
+      entriesList.innerHTML = '';
+      if (!entries.length) {
+        entriesList.innerHTML = '<div style="color:#aaa;text-align:center;">No previous entries yet.</div>';
+        return;
+      }
+      entries.forEach(entry => {
+        const d = new Date(entry.date);
+        const dateStr = d.toLocaleString([], { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        entriesList.innerHTML += `
+          <div class="entry">
+            <div class="entry-date">${dateStr}</div>
+            <div class="entry-mood">${entry.mood}</div>
+            <div class="entry-text">${entry.text.replace(/</g,'&lt;')}</div>
+          </div>
+        `;
+      });
+    }
+  </script>
+</body>
+</html>

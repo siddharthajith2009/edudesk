@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goal Setting - EduDesk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="api-config.js"></script>
+    <style>
+        :root {
+            --primary-color: #2D3250;
+            --secondary-color: #F76E11;
+            --accent-color: #FFB84C;
+            --background-light: #F7F7F7;
+            --text-dark: #1A1A2E;
+            --text-light: #666;
+            --success-color: #059669;
+            --warning-color: #D97706;
+            --error-color: #DC2626;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: var(--primary-color);
+            color: white;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-md);
+        }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar img {
+            height: 40px;
+        }
+
+        .navbar h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .main {
+            padding: 100px 40px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .goals-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .goals-header h2 {
+            font-family: 'Fraunces', serif;
+            font-size: 32px;
+        }
+
+        .add-goal-button {
+            background: var(--secondary-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-goal-button:hover {
+            background: #e05d00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(247, 110, 17, 0.2);
+        }
+
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .goal-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .goal-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .goal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .goal-category {
+            padding: 4px 12px;
+            background: var(--background-light);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .goal-progress {
+            margin: 16px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #E5E7EB;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--secondary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .goal-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat .value {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .stat .label {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .goal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .action-button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .edit-button {
+            background: var(--background-light);
+            color: var(--text-dark);
+        }
+
+        .edit-button:hover {
+            background: #E5E7EB;
+        }
+
+        .complete-button {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .complete-button:hover {
+            background: #047857;
+        }
+
+        .analytics-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 40px;
+        }
+
+        .analytics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .analytics-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .chart-container {
+            height: 300px;
+        }
+
+        .goal-form {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: var(--shadow-lg);
+            max-width: 600px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .loading-message, .no-goals-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+
+        .loading-message i {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            color: var(--secondary-color);
+        }
+
+        .no-goals-message i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+
+        .no-goals-message h3 {
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+
+        .no-goals-message p {
+            margin-bottom: 24px;
+            color: var(--text-light);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 4px rgba(247, 110, 17, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .cancel-button {
+            background: var(--background-light);
+            color: var(--text-dark);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .cancel-button:hover {
+            background: #E5E7EB;
+        }
+
+        .save-button {
+            background: var(--secondary-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .save-button:hover {
+            background: #e05d00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(247, 110, 17, 0.2);
+        }
+
+        @media (max-width: 1024px) {
+            .goals-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 12px 20px;
+            }
+
+            .navbar .logo h1 {
+                font-size: 1.2rem;
+            }
+
+            .back-button {
+                font-size: 14px !important;
+                padding: 8px 16px !important;
+            }
+
+            .main {
+                padding: 80px 20px 20px;
+            }
+
+            .goals-header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .goals-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .add-goal-button {
+                width: 100%;
+                max-width: 280px;
+                padding: 12px 20px;
+                font-size: 16px;
+            }
+
+            .goals-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .goal-card {
+                padding: 20px;
+            }
+
+            .goal-title {
+                font-size: 1.1rem;
+            }
+
+            .goal-category {
+                font-size: 0.8rem;
+                padding: 4px 8px;
+            }
+
+            .goal-stats {
+                gap: 12px;
+            }
+
+            .stat .value {
+                font-size: 1.2rem;
+            }
+
+            .stat .label {
+                font-size: 0.8rem;
+            }
+
+            .goal-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .action-button {
+                width: 100%;
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .analytics-section {
+                margin-top: 30px;
+            }
+
+            .analytics-header h3 {
+                font-size: 1.3rem;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+
+            .goal-form {
+                margin: 20px;
+                padding: 24px;
+                max-width: none;
+            }
+
+            .goal-form h3 {
+                font-size: 1.5rem;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-group label {
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 12px;
+                font-size: 16px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .cancel-button,
+            .save-button {
+                width: 100%;
+                padding: 12px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 10px 16px;
+            }
+
+            .navbar .logo img {
+                width: 32px;
+                height: 32px;
+            }
+
+            .navbar .logo h1 {
+                font-size: 1rem;
+            }
+
+            .back-button {
+                font-size: 12px !important;
+                padding: 6px 12px !important;
+            }
+
+            .main {
+                padding: 70px 16px 16px;
+            }
+
+            .goals-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .goal-card {
+                padding: 16px;
+            }
+
+            .goal-title {
+                font-size: 1rem;
+            }
+
+            .goal-stats {
+                gap: 8px;
+            }
+
+            .stat .value {
+                font-size: 1rem;
+            }
+
+            .analytics-header h3 {
+                font-size: 1.2rem;
+            }
+
+            .chart-container {
+                height: 200px;
+            }
+
+            .goal-form {
+                margin: 16px;
+                padding: 20px;
+            }
+
+            .goal-form h3 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="The EDUDESK..png" alt="EduDesk Logo">
+            <h1>EduDesk</h1>
+        </div>
+        <a href="dashboard.html" class="back-button" style="display: flex; align-items: center; gap: 8px; color: white; text-decoration: none; font-weight: 600; font-size: 16px; background: var(--accent-color); color: var(--primary-color); padding: 10px 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.2s;"> <i class="fas fa-arrow-left"></i> Back to Dashboard </a>
+    </div>
+
+    <div class="main">
+        <div class="goals-header">
+            <h2>My Goals</h2>
+            <button class="add-goal-button" onclick="showGoalForm()">
+                <i class="fas fa-plus"></i>
+                Add New Goal
+            </button>
+        </div>
+
+        <div class="goals-grid" id="goalsGrid">
+            <!-- Goals will be loaded dynamically from the API -->
+            <div class="loading-message" id="loadingMessage">
+                <i class="fas fa-spinner fa-spin"></i>
+                Loading your goals...
+            </div>
+        </div>
+
+        <div class="analytics-section">
+            <div class="analytics-header">
+                <h3>Goal Progress Overview</h3>
+            </div>
+            <div class="chart-container">
+                <canvas id="goalsChart"></canvas>
+            </div>
+        </div>
+
+        <div class="goal-form" id="goalForm">
+            <h3 style="margin-bottom: 24px; font-family: 'Fraunces', serif;">Create New Goal</h3>
+            <div class="form-group">
+                <label>Goal Title</label>
+                <input type="text" id="goalTitle" placeholder="Enter your goal" required>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select id="goalCategory" required>
+                    <option value="">Select Category</option>
+                    <option value="academic">Academic</option>
+                    <option value="reading">Reading</option>
+                    <option value="learning">Learning</option>
+                    <option value="health">Health</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="goalDescription" placeholder="Describe your goal" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Target Date</label>
+                <input type="date" id="goalTargetDate" required>
+            </div>
+            <div class="form-actions">
+                <button class="cancel-button" onclick="hideGoalForm()">Cancel</button>
+                <button class="save-button" onclick="saveGoal()">Save Goal</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let goalsChart = null;
+        let goals = [];
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!AuthAPI.isLoggedIn()) {
+                alert('Please log in to view your goals.');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            loadGoals();
+        });
+
+        // Load goals from API
+        async function loadGoals() {
+            try {
+                const goalsData = await GoalsAPI.getGoals();
+                goals = goalsData;
+                displayGoals(goals);
+                updateChart(goals);
+            } catch (error) {
+                console.error('Error loading goals:', error);
+                document.getElementById('loadingMessage').innerHTML = 
+                    '<i class="fas fa-exclamation-triangle"></i> Failed to load goals. Please try again.';
+            }
+        }
+
+        // Display goals in the grid
+        function displayGoals(goalsList) {
+            const goalsGrid = document.getElementById('goalsGrid');
+            
+            if (goalsList.length === 0) {
+                goalsGrid.innerHTML = `
+                    <div class="no-goals-message">
+                        <i class="fas fa-bullseye"></i>
+                        <h3>No goals yet</h3>
+                        <p>Create your first goal to get started!</p>
+                        <button class="add-goal-button" onclick="showGoalForm()">
+                            <i class="fas fa-plus"></i>
+                            Add Your First Goal
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            goalsGrid.innerHTML = goalsList.map(goal => {
+                const progress = calculateProgress(goal);
+                const daysLeft = calculateDaysLeft(goal.target_date);
+                
+                return `
+                    <div class="goal-card" data-goal-id="${goal.id}">
+                        <div class="goal-header">
+                            <div class="goal-title">${goal.title}</div>
+                            <div class="goal-category">${capitalizeFirst(goal.category)}</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span>Progress</span>
+                                <span>${progress}%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progress}%"></div>
+                            </div>
+                        </div>
+                        <div class="goal-stats">
+                            <div class="stat">
+                                <div class="value">${goal.total_tasks || 0}</div>
+                                <div class="label">Tasks</div>
+                            </div>
+                            <div class="stat">
+                                <div class="value">${goal.completed_tasks || 0}</div>
+                                <div class="label">Completed</div>
+                            </div>
+                            <div class="stat">
+                                <div class="value">${daysLeft}d</div>
+                                <div class="label">Left</div>
+                            </div>
+                        </div>
+                        <div class="goal-actions">
+                            <button class="action-button edit-button" onclick="editGoal(${goal.id})">Edit</button>
+                            <button class="action-button complete-button" onclick="completeGoal(${goal.id})" 
+                                    ${goal.status === 'completed' ? 'disabled' : ''}>
+                                ${goal.status === 'completed' ? '<i class="fas fa-check"></i> Completed' : 'Complete'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Calculate progress percentage
+        function calculateProgress(goal) {
+            if (!goal.total_tasks || goal.total_tasks === 0) return 0;
+            return Math.round((goal.completed_tasks / goal.total_tasks) * 100);
+        }
+
+        // Calculate days left
+        function calculateDaysLeft(targetDate) {
+            if (!targetDate) return 0;
+            const today = new Date();
+            const target = new Date(targetDate);
+            const diffTime = target - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return Math.max(0, diffDays);
+        }
+
+        // Capitalize first letter
+        function capitalizeFirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        // Update chart with real data
+        function updateChart(goalsList) {
+            const categories = ['academic', 'reading', 'learning', 'health', 'other'];
+            const completedData = [];
+            const inProgressData = [];
+
+            categories.forEach(category => {
+                const categoryGoals = goalsList.filter(goal => goal.category === category);
+                const completed = categoryGoals.filter(goal => goal.status === 'completed').length;
+                const inProgress = categoryGoals.filter(goal => goal.status === 'in_progress').length;
+                
+                completedData.push(completed);
+                inProgressData.push(inProgress);
+            });
+
+        const ctx = document.getElementById('goalsChart').getContext('2d');
+            
+            if (goalsChart) {
+                goalsChart.destroy();
+            }
+
+            goalsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Academic', 'Reading', 'Learning', 'Health', 'Other'],
+                datasets: [{
+                    label: 'Completed Goals',
+                        data: completedData,
+                    backgroundColor: '#F76E11',
+                    borderRadius: 8
+                }, {
+                    label: 'In Progress',
+                        data: inProgressData,
+                    backgroundColor: '#FFB84C',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+        }
+
+        // Goal form functions
+        function showGoalForm() {
+            document.getElementById('goalForm').style.display = 'block';
+        }
+
+        function hideGoalForm() {
+            document.getElementById('goalForm').style.display = 'none';
+            clearForm();
+        }
+
+        function clearForm() {
+            document.getElementById('goalTitle').value = '';
+            document.getElementById('goalCategory').value = '';
+            document.getElementById('goalDescription').value = '';
+            document.getElementById('goalTargetDate').value = '';
+        }
+
+        // Save new goal
+        async function saveGoal() {
+            const title = document.getElementById('goalTitle').value.trim();
+            const category = document.getElementById('goalCategory').value;
+            const description = document.getElementById('goalDescription').value.trim();
+            const targetDate = document.getElementById('goalTargetDate').value;
+
+            if (!title || !category || !targetDate) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            try {
+                const goalData = {
+                    title,
+                    category,
+                    description,
+                    target_date: targetDate,
+                    status: 'in_progress',
+                    total_tasks: 0,
+                    completed_tasks: 0
+                };
+
+                await GoalsAPI.createGoal(goalData);
+                hideGoalForm();
+                loadGoals(); // Reload goals
+                alert('Goal created successfully!');
+            } catch (error) {
+                console.error('Error creating goal:', error);
+                alert('Failed to create goal. Please try again.');
+            }
+        }
+
+        // Complete goal
+        async function completeGoal(goalId) {
+            if (confirm('Are you sure you want to mark this goal as completed?')) {
+                try {
+                    // Update goal status to completed
+                    const goal = goals.find(g => g.id === goalId);
+                    if (goal) {
+                        goal.status = 'completed';
+                        // Here you would call an API to update the goal
+                        // await GoalsAPI.updateGoal(goalId, { status: 'completed' });
+                        loadGoals(); // Reload goals
+                    }
+                } catch (error) {
+                    console.error('Error completing goal:', error);
+                    alert('Failed to complete goal. Please try again.');
+                }
+            }
+        }
+
+        // Edit goal (placeholder function)
+        function editGoal(goalId) {
+            alert('Edit functionality will be implemented soon!');
+        }
+    </script>
+</body>
+</html> 

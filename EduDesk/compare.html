@@ -1,0 +1,181 @@
+<!-- compare.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compare Goals and Progress - EduDesk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #2d3151;
+      --accent: #ffe066;
+      --background: #f4f6f9;
+      --card-bg: #fff;
+      --text: #2c3e50;
+      --secondary: #0078d4;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      margin: 0;
+      min-height: 100vh;
+    }
+    .navbar {
+      background: var(--primary);
+      width: 100%;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+    }
+    .navbar-logo {
+      height: 44px;
+      width: 44px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      border: 1px solid #eee;
+      margin: 0.5rem 0;
+    }
+    .navbar-links {
+      display: flex;
+      gap: 2.2rem;
+      align-items: center;
+    }
+    .navbar-link {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      letter-spacing: 0.01em;
+    }
+    .navbar-link:hover {
+      color: var(--accent);
+    }
+    @media (max-width: 700px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 0.3rem;
+        min-height: unset;
+      }
+      .navbar-links {
+        gap: 1.2rem;
+        margin-top: 0.5rem;
+      }
+      .navbar-logo {
+        height: 32px;
+        width: 32px;
+      }
+    }
+    .container {
+      max-width: 900px;
+      margin: 2.5rem auto 0 auto;
+      background: var(--card-bg);
+      padding: 2rem 1.5rem 1.5rem 1.5rem;
+      border-radius: 18px;
+      box-shadow: 0 4px 14px rgba(44,49,80,0.10);
+    }
+    .container h1 {
+      color: var(--primary);
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+    }
+    .comparison {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .box {
+      flex: 1 1 350px;
+      background: #f8fafc;
+      padding: 1.5rem 1.2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(44,49,80,0.05);
+      max-width: 48%;
+      min-width: 260px;
+    }
+    h2 {
+      font-size: 1.2rem;
+      color: var(--secondary);
+      margin-bottom: 1rem;
+    }
+    ul {
+      padding-left: 1.2rem;
+      margin: 0;
+    }
+    .empty {
+      color: #aaa;
+      text-align: center;
+      margin: 1.2rem 0;
+    }
+    @media (max-width: 900px) {
+      .container {
+        padding: 1.2rem 0.5rem 1rem 0.5rem;
+      }
+      .comparison {
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+      .box {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <img src="The EDUDESK..png" alt="EduDesk Logo" class="navbar-logo" />
+    <div class="navbar-links">
+      <a href="dashboard.html" class="navbar-link">Dashboard</a>
+      <a href="goalset.html" class="navbar-link">Set Goals</a>
+      <a href="prog.html" class="navbar-link">Progress</a>
+    </div>
+  </nav>
+  <div class="container">
+    <h1>Compare Goals and Progress</h1>
+    <div class="comparison">
+      <div class="box">
+        <h2>Goals</h2>
+        <ul id="goalList"></ul>
+      </div>
+      <div class="box">
+        <h2>Progress</h2>
+        <ul id="progressList"></ul>
+      </div>
+    </div>
+  </div>
+  <script>
+    const goals = JSON.parse(localStorage.getItem('goals')) || [];
+    const progress = JSON.parse(localStorage.getItem('progress')) || [];
+    const goalList = document.getElementById('goalList');
+    const progressList = document.getElementById('progressList');
+    if (!goals.length) {
+      goalList.innerHTML = '<li class="empty">No goals set yet.</li>';
+    } else {
+      goals.forEach(g => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span style='font-weight:600;color:#0078d4;'>${g.title}</span>: ${g.description}`;
+        goalList.appendChild(li);
+      });
+    }
+    if (!progress.length) {
+      progressList.innerHTML = '<li class="empty">No progress entries yet.</li>';
+    } else {
+      progress.forEach(p => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span style='font-weight:600;color:#0078d4;'>${p.subject}</span>: ${p.progress}`;
+        progressList.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>

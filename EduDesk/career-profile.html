@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Career & Profile Building - EduDesk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Fraunces:wght@500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2D3250;
+      --secondary-color: #F76E11;
+      --accent-color: #FFB84C;
+      --background-light: #F7F7F7;
+      --background-accent: #FFF4E0;
+      --text-dark: #1A1A2E;
+      --text-light: #4A4A4A;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: var(--background-light);
+      color: var(--text-dark);
+    }
+    
+    .navbar {
+      background: var(--primary-color);
+      color: white;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-md);
+    }
+    
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .navbar img {
+      height: 40px;
+    }
+    
+    .navbar .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    
+    .navbar .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    
+    .navbar .nav-links a:hover {
+      background: var(--secondary-color);
+      color: #fff;
+    }
+    
+    .navbar .nav-links a.dashboard-btn {
+      background: var(--accent-color);
+      color: var(--primary-color);
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .navbar .nav-links a.dashboard-btn:hover {
+      background: #fff;
+      color: var(--primary-color);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .main {
+      padding: 100px 24px 40px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      padding: 60px 40px;
+      border-radius: 24px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    
+    .hero-section h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 3rem;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+    
+    .hero-section p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .section-card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: var(--shadow-lg);
+      padding: 40px;
+      margin-bottom: 32px;
+    }
+    
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin-bottom: 24px;
+      font-weight: 700;
+    }
+    
+    .questionnaire {
+      display: block;
+    }
+    
+    .questionnaire.active {
+      display: block;
+    }
+    
+    .question {
+      margin-bottom: 32px;
+      padding: 24px;
+      background: var(--background-accent);
+      border-radius: 16px;
+      border-left: 4px solid var(--secondary-color);
+    }
+    
+    .question h3 {
+      font-size: 1.3rem;
+      color: var(--primary-color);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .option:hover {
+      border-color: var(--secondary-color);
+      background: var(--background-accent);
+    }
+    
+    .option.selected {
+      border-color: var(--secondary-color);
+      background: var(--secondary-color);
+      color: white;
+    }
+    
+    .option input[type="radio"] {
+      margin: 0;
+      accent-color: var(--secondary-color);
+    }
+    
+    .btn {
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+    
+    .btn-primary {
+      background: var(--secondary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--accent-color);
+      color: var(--primary-color);
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background: var(--background-accent);
+      color: var(--primary-color);
+      border: 2px solid var(--secondary-color);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--secondary-color);
+      color: white;
+    }
+    
+    .results-section {
+      display: none;
+    }
+    
+    .results-section.active {
+      display: block;
+    }
+    
+    .career-path {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 32px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .career-path h3 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    
+    .university-section {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      padding: 32px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .university-section h3 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    
+    .university-section h4 {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+      padding-bottom: 8px;
+    }
+    
+    .tips-section {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      padding: 32px;
+      border-radius: 16px;
+    }
+    
+    .tips-section h3 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    
+    .tip-item {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .tip-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+      transition: width 0.3s ease;
+    }
+    
+    .navigation-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 32px;
+    }
+    
+    @media (max-width: 768px) {
+      .main {
+        padding: 80px 16px 20px 16px;
+      }
+      
+      .hero-section {
+        padding: 40px 20px;
+      }
+      
+      .hero-section h1 {
+        font-size: 2rem;
+      }
+      
+      .section-card {
+        padding: 24px;
+      }
+      
+      .section-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">
+      <img src="The EDUDESK..png" alt="EduDesk Logo">
+    </div>
+    <div class="nav-links">
+      <a href="dashboard.html" class="dashboard-btn">Back to Dashboard</a>
+      <a href="study-timer.html">Study Timer</a>
+      <a href="goal-setting.html">Goals</a>
+      <a href="mood-tracker.html">Mood Tracker</a>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="hero-section">
+      <h1>Career & Profile Building</h1>
+      <p>Discover your path to success with personalized career guidance and university recommendations</p>
+    </div>
+
+    <div class="section-card">
+      <h2 class="section-title">Career Assessment Questionnaire</h2>
+      <p>Answer these questions to help us understand your career goals and provide personalized guidance.</p>
+      
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <div class="questionnaire" id="questionnaire">
+        <div class="question" id="q1">
+          <h3>What is your primary career interest?</h3>
+          <div class="options">
+            <div class="option" onclick="selectOption(this, 'q1')">
+              <input type="radio" name="q1" value="technology">
+              <span>Technology & Computer Science</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q1')">
+              <input type="radio" name="q1" value="medicine">
+              <span>Medicine & Healthcare</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q1')">
+              <input type="radio" name="q1" value="business">
+              <span>Business & Management</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q1')">
+              <input type="radio" name="q1" value="arts">
+              <span>Arts & Creative Fields</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q1')">
+              <input type="radio" name="q1" value="engineering">
+              <span>Engineering</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="question" id="q2">
+          <h3>What type of work environment do you prefer?</h3>
+          <div class="options">
+            <div class="option" onclick="selectOption(this, 'q2')">
+              <input type="radio" name="q2" value="corporate">
+              <span>Corporate office environment</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q2')">
+              <input type="radio" name="q2" value="startup">
+              <span>Startup/Innovative environment</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q2')">
+              <input type="radio" name="q2" value="remote">
+              <span>Remote/Flexible work</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q2')">
+              <input type="radio" name="q2" value="research">
+              <span>Research & Academia</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="question" id="q3">
+          <h3>Where are you located?</h3>
+          <div class="options">
+            <div class="option" onclick="selectOption(this, 'q3')">
+              <input type="radio" name="q3" value="us">
+              <span>United States</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q3')">
+              <input type="radio" name="q3" value="uk">
+              <span>United Kingdom</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q3')">
+              <input type="radio" name="q3" value="canada">
+              <span>Canada</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q3')">
+              <input type="radio" name="q3" value="australia">
+              <span>Australia</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q3')">
+              <input type="radio" name="q3" value="germany">
+              <span>Germany</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q3')">
+              <input type="radio" name="q3" value="france">
+              <span>France</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q3')">
+              <input type="radio" name="q3" value="singapore">
+              <span>Singapore</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q3')">
+              <input type="radio" name="q3" value="uae">
+              <span>UAE</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q3')">
+              <input type="radio" name="q3" value="other">
+              <span>Other</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="question" id="q4">
+          <h3>What is your preferred location for studies/career?</h3>
+          <div class="options">
+            <div class="option" onclick="selectOption(this, 'q4')">
+              <input type="radio" name="q4" value="domestic">
+              <span>Domestic (within my country)</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q4')">
+              <input type="radio" name="q4" value="international">
+              <span>International opportunities</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q4')">
+              <input type="radio" name="q4" value="flexible">
+              <span>Flexible - open to both</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="question" id="q5">
+          <h3>What is your current academic level?</h3>
+          <div class="options">
+            <div class="option" onclick="selectOption(this, 'q5')">
+              <input type="radio" name="q5" value="highschool">
+              <span>High School Student</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q5')">
+              <input type="radio" name="q5" value="undergraduate">
+              <span>Undergraduate Student</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q5')">
+              <input type="radio" name="q5" value="graduate">
+              <span>Graduate Student</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q5')">
+              <input type="radio" name="q5" value="professional">
+              <span>Working Professional</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="question" id="q6">
+          <h3>What are your primary career goals?</h3>
+          <div class="options">
+            <div class="option" onclick="selectOption(this, 'q6')">
+              <input type="radio" name="q6" value="leadership">
+              <span>Leadership & Management roles</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q6')">
+              <input type="radio" name="q6" value="expertise">
+              <span>Technical expertise & specialization</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q6')">
+              <input type="radio" name="q6" value="entrepreneurship">
+              <span>Entrepreneurship & Innovation</span>
+            </div>
+            <div class="option" onclick="selectOption(this, 'q6')">
+              <input type="radio" name="q6" value="research">
+              <span>Research & Development</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="navigation-buttons">
+          <button class="btn btn-secondary" onclick="previousQuestion()" id="prevBtn" style="display: none;">Previous</button>
+          <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn">Next</button>
+        </div>
+      </div>
+
+      <div class="results-section" id="resultsSection">
+        <div class="career-path">
+          <h3><i class="fas fa-road"></i> Your Career Path</h3>
+          <div id="careerPathContent"></div>
+        </div>
+
+        <div class="university-section">
+          <h3><i class="fas fa-university"></i> Recommended Universities</h3>
+          <div id="universityContent"></div>
+        </div>
+
+        <div class="tips-section">
+          <h3><i class="fas fa-lightbulb"></i> Personalized Tips</h3>
+          <div id="tipsContent"></div>
+        </div>
+
+        <div style="text-align: center; margin-top: 32px;">
+          <button class="btn btn-secondary" onclick="restartQuestionnaire()">Take Assessment Again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentQuestion = 1;
+    const totalQuestions = 6;
+    let answers = {};
+    let assessmentCompleted = false;
+    let savedResults = null;
+
+    // Load saved assessment data on page load
+    function loadSavedAssessment() {
+      const savedAnswers = localStorage.getItem('careerAssessmentAnswers');
+      const savedResults = localStorage.getItem('careerAssessmentResults');
+      const savedCompletion = localStorage.getItem('careerAssessmentCompleted');
+      const savedCurrentQuestion = localStorage.getItem('careerAssessmentCurrentQuestion');
+      
+      if (savedAnswers) {
+        answers = JSON.parse(savedAnswers);
+        
+        if (savedCompletion === 'true') {
+          assessmentCompleted = true;
+          
+          // Show results section directly
+          document.getElementById('questionnaire').style.display = 'none';
+          document.getElementById('resultsSection').style.display = 'block';
+          document.getElementById('resultsSection').classList.add('active');
+          
+          // Restore saved results if available
+          if (savedResults) {
+            const results = JSON.parse(savedResults);
+            document.getElementById('careerPathContent').innerHTML = results.careerPath;
+            document.getElementById('universityContent').innerHTML = results.universities;
+            document.getElementById('tipsContent').innerHTML = results.tips;
+          } else {
+            // Generate results if not saved
+            generateResults();
+          }
+          return true;
+        } else if (savedCurrentQuestion) {
+          currentQuestion = parseInt(savedCurrentQuestion);
+          showCurrentQuestion();
+          updateProgress();
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // Save assessment data
+    function saveAssessmentData() {
+      localStorage.setItem('careerAssessmentAnswers', JSON.stringify(answers));
+      localStorage.setItem('careerAssessmentCurrentQuestion', currentQuestion.toString());
+      
+      if (assessmentCompleted) {
+        localStorage.setItem('careerAssessmentCompleted', 'true');
+      } else {
+        localStorage.setItem('careerAssessmentCompleted', 'false');
+      }
+    }
+
+    // Save results for display
+    function saveResults(careerPath, universities, tips) {
+      const results = {
+        careerPath: careerPath,
+        universities: universities,
+        tips: tips,
+        timestamp: Date.now()
+      };
+      localStorage.setItem('careerAssessmentResults', JSON.stringify(results));
+    }
+
+    function selectOption(element, questionId) {
+      // Remove selected class from all options in this question
+      const options = element.parentElement.querySelectorAll('.option');
+      options.forEach(opt => opt.classList.remove('selected'));
+      
+      // Add selected class to clicked option
+      element.classList.add('selected');
+      
+      // Update answers
+      const radio = element.querySelector('input[type="radio"]');
+      answers[questionId] = radio.value;
+      
+      // Save the selection immediately
+      saveAssessmentData();
+      
+      // Update progress
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const answeredQuestions = Object.keys(answers).length;
+      const progress = (answeredQuestions / totalQuestions) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < totalQuestions) {
+        if (answers['q' + currentQuestion]) {
+          currentQuestion++;
+          saveAssessmentData();
+          showCurrentQuestion();
+        } else {
+          alert('Please select an option before continuing.');
+        }
+      } else {
+        if (answers['q' + currentQuestion]) {
+          assessmentCompleted = true;
+          saveAssessmentData();
+          showResults();
+        } else {
+          alert('Please select an option before continuing.');
+        }
+      }
+    }
+
+    function previousQuestion() {
+      if (currentQuestion > 1) {
+        currentQuestion--;
+        saveAssessmentData();
+        showCurrentQuestion();
+      }
+    }
+
+    function showCurrentQuestion() {
+      // Ensure questionnaire is visible
+      document.getElementById('questionnaire').style.display = 'block';
+      document.getElementById('resultsSection').style.display = 'none';
+      document.getElementById('resultsSection').classList.remove('active');
+      
+      // Hide all questions
+      for (let i = 1; i <= totalQuestions; i++) {
+        document.getElementById('q' + i).style.display = 'none';
+      }
+      
+      // Show current question
+      document.getElementById('q' + currentQuestion).style.display = 'block';
+      
+      // Update navigation buttons
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      
+      if (currentQuestion === 1) {
+        prevBtn.style.display = 'none';
+      } else {
+        prevBtn.style.display = 'inline-block';
+      }
+      
+      if (currentQuestion === totalQuestions) {
+        nextBtn.textContent = 'Get Results';
+      } else {
+        nextBtn.textContent = 'Next';
+      }
+      
+      // Restore selected state for current question if it was previously answered
+      if (answers['q' + currentQuestion]) {
+        const selectedValue = answers['q' + currentQuestion];
+        const options = document.querySelectorAll('#q' + currentQuestion + ' .option');
+        options.forEach(option => {
+          const radio = option.querySelector('input[type="radio"]');
+          if (radio.value === selectedValue) {
+            option.classList.add('selected');
+          }
+        });
+      }
+    }
+
+    function showResults() {
+      document.getElementById('questionnaire').style.display = 'none';
+      document.getElementById('resultsSection').style.display = 'block';
+      document.getElementById('resultsSection').classList.add('active');
+      
+      generateResults();
+      
+      // Save the generated results
+      const careerPath = document.getElementById('careerPathContent').innerHTML;
+      const universities = document.getElementById('universityContent').innerHTML;
+      const tips = document.getElementById('tipsContent').innerHTML;
+      saveResults(careerPath, universities, tips);
+    }
+
+    function generateResults() {
+      const careerPath = generateCareerPath();
+      const universities = generateUniversities();
+      const tips = generateTips();
+      
+      document.getElementById('careerPathContent').innerHTML = careerPath;
+      document.getElementById('universityContent').innerHTML = universities;
+      document.getElementById('tipsContent').innerHTML = tips;
+    }
+
+    function generateCareerPath() {
+      const interest = answers.q1;
+      const environment = answers.q2;
+      const location = answers.q3;
+      const level = answers.q4;
+      const goals = answers.q5;
+      
+      let path = '';
+      
+      if (interest === 'technology') {
+        path = `
+          <p><strong>Technology Career Path:</strong></p>
+          <ul>
+            <li>Start with Computer Science fundamentals and programming languages</li>
+            <li>Build projects and contribute to open source</li>
+            <li>Specialize in areas like AI, Cybersecurity, or Web Development</li>
+            <li>Gain industry experience through internships</li>
+            <li>Consider advanced degrees for research or leadership roles</li>
+          </ul>
+        `;
+      } else if (interest === 'medicine') {
+        path = `
+          <p><strong>Medical Career Path:</strong></p>
+          <ul>
+            <li>Focus on Biology, Chemistry, and Physics in high school</li>
+            <li>Prepare for medical school entrance exams</li>
+            <li>Complete medical school and residency</li>
+            <li>Choose a specialty based on interests</li>
+            <li>Consider research opportunities in medical institutions</li>
+          </ul>
+        `;
+      } else if (interest === 'business') {
+        path = `
+          <p><strong>Business Career Path:</strong></p>
+          <ul>
+            <li>Study Business Administration or Economics</li>
+            <li>Develop leadership and communication skills</li>
+            <li>Gain experience through internships and networking</li>
+            <li>Consider MBA for advanced opportunities</li>
+            <li>Focus on entrepreneurship or corporate leadership</li>
+          </ul>
+        `;
+      } else if (interest === 'arts') {
+        path = `
+          <p><strong>Creative Career Path:</strong></p>
+          <ul>
+            <li>Build a strong portfolio of creative work</li>
+            <li>Study design principles and creative software</li>
+            <li>Network with industry professionals</li>
+            <li>Consider specialized art or design programs</li>
+            <li>Develop both technical and artistic skills</li>
+          </ul>
+        `;
+      } else if (interest === 'engineering') {
+        path = `
+          <p><strong>Engineering Career Path:</strong></p>
+          <ul>
+            <li>Focus on Mathematics and Physics fundamentals</li>
+            <li>Choose a specific engineering discipline</li>
+            <li>Complete engineering degree with practical projects</li>
+            <li>Obtain professional engineering license</li>
+            <li>Specialize in emerging fields like renewable energy</li>
+          </ul>
+        `;
+      } else {
+        // Default case for any other interest
+        path = `
+          <p><strong>General Career Path:</strong></p>
+          <ul>
+            <li>Focus on core subjects related to your interest</li>
+            <li>Develop both technical and soft skills</li>
+            <li>Seek mentorship and guidance from professionals</li>
+            <li>Build a strong foundation through education</li>
+            <li>Stay adaptable and open to new opportunities</li>
+          </ul>
+        `;
+      }
+      
+      return path;
+    }
+
+    function generateUniversities() {
+      const interest = answers.q1;
+      const userLocation = answers.q3;
+      const locationPreference = answers.q4;
+      
+      let universities = '';
+      let locationTitle = '';
+      
+      // Determine location title based on user's location and preference
+      if (locationPreference === 'domestic') {
+        if (userLocation === 'us') {
+          locationTitle = '🇺🇸 Domestic Universities (US)';
+        } else if (userLocation === 'uk') {
+          locationTitle = '🇬🇧 Domestic Universities (UK)';
+        } else if (userLocation === 'canada') {
+          locationTitle = '🇨🇦 Domestic Universities (Canada)';
+        } else if (userLocation === 'australia') {
+          locationTitle = '🇦🇺 Domestic Universities (Australia)';
+        } else if (userLocation === 'germany') {
+          locationTitle = '🇩🇪 Domestic Universities (Germany)';
+        } else if (userLocation === 'france') {
+          locationTitle = '🇫🇷 Domestic Universities (France)';
+        } else if (userLocation === 'singapore') {
+          locationTitle = '🇸🇬 Domestic Universities (Singapore)';
+        } else if (userLocation === 'uae') {
+          locationTitle = '🇦🇪 Domestic Universities (UAE)';
+        } else {
+          locationTitle = '🏠 Domestic Universities (Your Country)';
+        }
+      } else if (locationPreference === 'international') {
+        locationTitle = '🌍 International Universities';
+      } else {
+        locationTitle = '🌐 Global Universities (Domestic & International)';
+      }
+      
+      if (interest === 'technology') {
+        if (locationPreference === 'domestic') {
+          if (userLocation === 'us') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>MIT</strong> - World's top Computer Science program</li>
+                <li><strong>Stanford University</strong> - Silicon Valley connections</li>
+                <li><strong>Carnegie Mellon</strong> - Strong in AI and Robotics</li>
+                <li><strong>UC Berkeley</strong> - Excellent for Software Engineering</li>
+                <li><strong>Georgia Tech</strong> - Great for practical tech skills</li>
+              </ul>
+            `;
+          } else if (userLocation === 'uk') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>University of Oxford</strong> - UK's leading Computer Science</li>
+                <li><strong>University of Cambridge</strong> - AI and machine learning excellence</li>
+                <li><strong>Imperial College London</strong> - Technology and innovation hub</li>
+                <li><strong>University College London</strong> - Computer science research</li>
+                <li><strong>University of Edinburgh</strong> - Informatics and AI</li>
+              </ul>
+            `;
+          } else if (userLocation === 'canada') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>University of Toronto</strong> - Canada's AI research leader</li>
+                <li><strong>University of British Columbia</strong> - Computer science excellence</li>
+                <li><strong>University of Waterloo</strong> - Co-op programs and tech industry</li>
+                <li><strong>McGill University</strong> - Research and innovation</li>
+                <li><strong>University of Alberta</strong> - AI and machine learning</li>
+              </ul>
+            `;
+          } else if (userLocation === 'australia') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>University of Melbourne</strong> - Computer science and IT</li>
+                <li><strong>University of Sydney</strong> - Technology innovation</li>
+                <li><strong>Australian National University</strong> - Research excellence</li>
+                <li><strong>University of Queensland</strong> - IT and computer science</li>
+                <li><strong>Monash University</strong> - Technology and innovation</li>
+              </ul>
+            `;
+          } else if (userLocation === 'germany') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>Technical University of Munich</strong> - German engineering excellence</li>
+                <li><strong>RWTH Aachen University</strong> - Technology and engineering</li>
+                <li><strong>Karlsruhe Institute of Technology</strong> - Computer science</li>
+                <li><strong>Technical University of Berlin</strong> - Innovation and research</li>
+                <li><strong>University of Stuttgart</strong> - Engineering and technology</li>
+              </ul>
+            `;
+          } else if (userLocation === 'france') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>École Polytechnique</strong> - Engineering and technology</li>
+                <li><strong>Sorbonne University</strong> - Computer science research</li>
+                <li><strong>CentraleSupélec</strong> - Engineering excellence</li>
+                <li><strong>École Normale Supérieure</strong> - Research and innovation</li>
+                <li><strong>Université Paris-Saclay</strong> - Technology and science</li>
+              </ul>
+            `;
+          } else if (userLocation === 'singapore') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>National University of Singapore</strong> - Asian tech powerhouse</li>
+                <li><strong>Nanyang Technological University</strong> - Engineering and technology</li>
+                <li><strong>Singapore Management University</strong> - Business and technology</li>
+                <li><strong>Singapore University of Technology and Design</strong> - Innovation and design</li>
+                <li><strong>Singapore Institute of Technology</strong> - Applied technology</li>
+              </ul>
+            `;
+          } else if (userLocation === 'uae') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>Khalifa University</strong> - Engineering and technology</li>
+                <li><strong>United Arab Emirates University</strong> - Computer science</li>
+                <li><strong>American University of Sharjah</strong> - Technology and innovation</li>
+                <li><strong>University of Sharjah</strong> - Engineering excellence</li>
+                <li><strong>Zayed University</strong> - Technology and business</li>
+              </ul>
+            `;
+          } else {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>Local University</strong> - Check your country's top institutions</li>
+                <li><strong>National Technical University</strong> - Engineering and technology</li>
+                <li><strong>State University</strong> - Computer science programs</li>
+                <li><strong>Private University</strong> - Technology and innovation</li>
+                <li><strong>Research Institute</strong> - Specialized programs</li>
+              </ul>
+            `;
+          }
+        } else if (locationPreference === 'international') {
+          universities = `
+            <h4>${locationTitle}</h4>
+            <ul>
+              <li><strong>MIT</strong> - World's top Computer Science program</li>
+              <li><strong>University of Oxford</strong> - UK's leading Computer Science</li>
+              <li><strong>ETH Zurich</strong> - Switzerland's tech innovation hub</li>
+              <li><strong>National University of Singapore</strong> - Asian tech powerhouse</li>
+              <li><strong>University of Toronto</strong> - Canada's AI research leader</li>
+            </ul>
+          `;
+        } else {
+          universities = `
+            <h4>${locationTitle}</h4>
+            <ul>
+              <li><strong>MIT</strong> - World's top Computer Science program</li>
+              <li><strong>University of Oxford</strong> - UK's leading Computer Science</li>
+              <li><strong>ETH Zurich</strong> - Switzerland's tech innovation hub</li>
+              <li><strong>Stanford University</strong> - Silicon Valley connections</li>
+              <li><strong>National University of Singapore</strong> - Asian tech powerhouse</li>
+            </ul>
+          `;
+        }
+      } else if (interest === 'medicine') {
+        if (locationPreference === 'domestic') {
+          if (userLocation === 'us') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>Harvard Medical School</strong> - Prestigious medical program</li>
+                <li><strong>Johns Hopkins</strong> - Leading medical research</li>
+                <li><strong>Stanford Medical School</strong> - Innovation in healthcare</li>
+                <li><strong>Mayo Clinic</strong> - Clinical excellence</li>
+                <li><strong>UCLA Medical School</strong> - Diverse patient population</li>
+              </ul>
+            `;
+          } else if (userLocation === 'uk') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>University of Oxford</strong> - UK's medical excellence</li>
+                <li><strong>University of Cambridge</strong> - Biomedical research leader</li>
+                <li><strong>Imperial College London</strong> - Medical innovation</li>
+                <li><strong>University College London</strong> - Medical research</li>
+                <li><strong>King's College London</strong> - Healthcare excellence</li>
+              </ul>
+            `;
+          } else if (userLocation === 'canada') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>University of Toronto</strong> - Canada's healthcare leader</li>
+                <li><strong>McGill University</strong> - Medical research excellence</li>
+                <li><strong>University of British Columbia</strong> - Health sciences</li>
+                <li><strong>University of Alberta</strong> - Medical innovation</li>
+                <li><strong>University of Calgary</strong> - Healthcare research</li>
+              </ul>
+            `;
+          } else if (userLocation === 'australia') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>University of Melbourne</strong> - Australia's medical research</li>
+                <li><strong>University of Sydney</strong> - Medical excellence</li>
+                <li><strong>Monash University</strong> - Health sciences</li>
+                <li><strong>University of Queensland</strong> - Medical innovation</li>
+                <li><strong>Australian National University</strong> - Medical research</li>
+              </ul>
+            `;
+          } else if (userLocation === 'germany') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>Heidelberg University</strong> - Medical excellence</li>
+                <li><strong>Ludwig Maximilian University</strong> - Medical research</li>
+                <li><strong>Technical University of Munich</strong> - Medical innovation</li>
+                <li><strong>Charité Berlin</strong> - Healthcare research</li>
+                <li><strong>University of Freiburg</strong> - Medical sciences</li>
+              </ul>
+            `;
+          } else if (userLocation === 'france') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>Sorbonne University</strong> - Medical excellence</li>
+                <li><strong>Université Paris-Saclay</strong> - Medical research</li>
+                <li><strong>Université de Lyon</strong> - Health sciences</li>
+                <li><strong>Université de Strasbourg</strong> - Medical innovation</li>
+                <li><strong>Université de Bordeaux</strong> - Healthcare research</li>
+              </ul>
+            `;
+          } else if (userLocation === 'singapore') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>National University of Singapore</strong> - Medical excellence</li>
+                <li><strong>Duke-NUS Medical School</strong> - Medical innovation</li>
+                <li><strong>Nanyang Technological University</strong> - Health sciences</li>
+                <li><strong>Singapore Management University</strong> - Healthcare management</li>
+                <li><strong>Singapore Institute of Technology</strong> - Applied health sciences</li>
+              </ul>
+            `;
+          } else if (userLocation === 'uae') {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>United Arab Emirates University</strong> - Medical sciences</li>
+                <li><strong>Khalifa University</strong> - Health sciences</li>
+                <li><strong>American University of Sharjah</strong> - Medical research</li>
+                <li><strong>University of Sharjah</strong> - Healthcare innovation</li>
+                <li><strong>Zayed University</strong> - Health sciences</li>
+              </ul>
+            `;
+          } else {
+            universities = `
+              <h4>${locationTitle}</h4>
+              <ul>
+                <li><strong>Local Medical School</strong> - Check your country's top medical institutions</li>
+                <li><strong>National University</strong> - Medical programs</li>
+                <li><strong>State Medical College</strong> - Healthcare education</li>
+                <li><strong>Private Medical School</strong> - Medical innovation</li>
+                <li><strong>Research Institute</strong> - Medical research programs</li>
+              </ul>
+            `;
+          }
+        } else if (locationPreference === 'international') {
+          universities = `
+            <h4>${locationTitle}</h4>
+            <ul>
+              <li><strong>Harvard Medical School</strong> - Prestigious medical program</li>
+              <li><strong>University of Oxford</strong> - UK's medical excellence</li>
+              <li><strong>Johns Hopkins</strong> - Leading medical research</li>
+              <li><strong>University of Cambridge</strong> - Biomedical research leader</li>
+              <li><strong>Stanford Medical School</strong> - Innovation in healthcare</li>
+            </ul>
+          `;
+        } else {
+          universities = `
+            <h4>${locationTitle}</h4>
+            <ul>
+              <li><strong>Harvard Medical School</strong> - Prestigious medical program</li>
+              <li><strong>University of Oxford</strong> - UK's medical excellence</li>
+              <li><strong>Johns Hopkins</strong> - Leading medical research</li>
+              <li><strong>University of Cambridge</strong> - Biomedical research leader</li>
+              <li><strong>Stanford Medical School</strong> - Innovation in healthcare</li>
+            </ul>
+          `;
+        }
+      } else if (interest === 'business') {
+        if (locationPreference === 'domestic') {
+          universities = `
+            <h4>${locationTitle}</h4>
+            <ul>
+              <li><strong>Harvard Business School</strong> - Top MBA program</li>
+              <li><strong>Wharton School</strong> - Finance and business excellence</li>
+              <li><strong>Stanford GSB</strong> - Entrepreneurship focus</li>
+              <li><strong>MIT Sloan</strong> - Technology and business integration</li>
+              <li><strong>University of Chicago Booth</strong> - Economics and finance</li>
+            </ul>
+          `;
+        } else if (locationPreference === 'international') {
+          universities = `
+            <h4>${locationTitle}</h4>
+            <ul>
+              <li><strong>INSEAD</strong> - France/Singapore, Global business perspective</li>
+              <li><strong>London Business School</strong> - UK's business leadership</li>
+              <li><strong>IESE Business School</strong> - Spain's management excellence</li>
+              <li><strong>University of Hong Kong</strong> - Asian business hub</li>
+              <li><strong>Rotterdam School of Management</strong> - Netherlands' business innovation</li>
+            </ul>
+          `;
+        } else {
+          universities = `
+            <h4>${locationTitle}</h4>
+            <ul>
+              <li><strong>Harvard Business School</strong> - Top MBA program</li>
+              <li><strong>INSEAD</strong> - France/Singapore, Global business perspective</li>
+              <li><strong>Wharton School</strong> - Finance and business excellence</li>
+              <li><strong>London Business School</strong> - UK's business leadership</li>
+              <li><strong>Stanford GSB</strong> - Entrepreneurship focus</li>
+            </ul>
+          `;
+        }
+      } else if (interest === 'arts') {
+        if (locationPreference === 'domestic') {
+          universities = `
+            <h4>${locationTitle}</h4>
+            <ul>
+              <li><strong>Parsons School of Design</strong> - Creative arts excellence</li>
+              <li><strong>Rhode Island School of Design</strong> - Fine arts focus</li>
+              <li><strong>Pratt Institute</strong> - Design and architecture</li>
+              <li><strong>School of Visual Arts</strong> - Digital arts and media</li>
+              <li><strong>ArtCenter College of Design</strong> - Professional design education</li>
+            </ul>
+          `;
+        } else if (locationPreference === 'international') {
+          universities = `
+            <h4>${locationTitle}</h4>
+            <ul>
+              <li><strong>Central Saint Martins</strong> - UK's creative arts leader</li>
+              <li><strong>Royal College of Art</strong> - London's art and design</li>
+              <li><strong>École des Beaux-Arts</strong> - France's fine arts tradition</li>
+              <li><strong>Tokyo University of the Arts</strong> - Japan's artistic innovation</li>
+              <li><strong>Parsons Paris</strong> - American arts education in France</li>
+            </ul>
+          `;
+        } else {
+          universities = `
+            <h4>${locationTitle}</h4>
+            <ul>
+              <li><strong>Parsons School of Design</strong> - Creative arts excellence</li>
+              <li><strong>Central Saint Martins</strong> - UK's creative arts leader</li>
+              <li><strong>Rhode Island School of Design</strong> - Fine arts focus</li>
+              <li><strong>Royal College of Art</strong> - London's art and design</li>
+              <li><strong>Pratt Institute</strong> - Design and architecture</li>
+            </ul>
+          `;
+        }
+      } else if (interest === 'engineering') {
+        if (locationPreference === 'domestic') {
+          universities = `
+            <h4>${locationTitle}</h4>
+            <ul>
+              <li><strong>MIT</strong> - Engineering excellence across disciplines</li>
+              <li><strong>Stanford University</strong> - Innovation in engineering</li>
+              <li><strong>Caltech</strong> - Science and engineering research</li>
+              <li><strong>UC Berkeley</strong> - Civil and environmental engineering</li>
+              <li><strong>Georgia Tech</strong> - Industrial and systems engineering</li>
+            </ul>
+          `;
+        } else if (locationPreference === 'international') {
+          universities = `
+            <h4>${locationTitle}</h4>
+            <ul>
+              <li><strong>Imperial College London</strong> - UK's engineering leader</li>
+              <li><strong>ETH Zurich</strong> - Switzerland's technical excellence</li>
+              <li><strong>Technical University of Munich</strong> - German engineering innovation</li>
+              <li><strong>University of Tokyo</strong> - Japan's engineering tradition</li>
+              <li><strong>Delft University of Technology</strong> - Netherlands' engineering</li>
+            </ul>
+          `;
+        } else {
+          universities = `
+            <h4>${locationTitle}</h4>
+            <ul>
+              <li><strong>MIT</strong> - Engineering excellence across disciplines</li>
+              <li><strong>Imperial College London</strong> - UK's engineering leader</li>
+              <li><strong>Stanford University</strong> - Innovation in engineering</li>
+              <li><strong>ETH Zurich</strong> - Switzerland's technical excellence</li>
+              <li><strong>Caltech</strong> - Science and engineering research</li>
+            </ul>
+          `;
+        }
+      }
+      
+      return universities;
+    }
+
+    function generateTips() {
+      const interest = answers.q1;
+      const environment = answers.q2;
+      const level = answers.q4;
+      const goals = answers.q5;
+      
+      let tips = '';
+      
+      if (interest === 'technology') {
+        tips = `
+          <div class="tip-item">
+            <strong>Build a Strong Portfolio:</strong> Create GitHub repositories with your projects, contribute to open source, and maintain an active online presence.
+          </div>
+          <div class="tip-item">
+            <strong>Learn Modern Technologies:</strong> Focus on in-demand skills like AI/ML, cloud computing, and cybersecurity.
+          </div>
+          <div class="tip-item">
+            <strong>Network Actively:</strong> Attend tech meetups, hackathons, and conferences to build professional connections.
+          </div>
+          <div class="tip-item">
+            <strong>Stay Updated:</strong> Follow tech blogs, podcasts, and industry leaders to stay current with trends.
+          </div>
+        `;
+      } else if (interest === 'medicine') {
+        tips = `
+          <div class="tip-item">
+            <strong>Volunteer Experience:</strong> Gain clinical experience through volunteering at hospitals or clinics.
+          </div>
+          <div class="tip-item">
+            <strong>Research Opportunities:</strong> Participate in medical research projects to strengthen your application.
+          </div>
+          <div class="tip-item">
+            <strong>Shadow Physicians:</strong> Spend time shadowing doctors to understand different specialties.
+          </div>
+          <div class="tip-item">
+            <strong>Leadership Roles:</strong> Take on leadership positions in health-related organizations.
+          </div>
+        `;
+      } else if (interest === 'business') {
+        tips = `
+          <div class="tip-item">
+            <strong>Internship Strategy:</strong> Secure internships at top companies to build your resume and network.
+          </div>
+          <div class="tip-item">
+            <strong>Develop Soft Skills:</strong> Focus on communication, leadership, and problem-solving abilities.
+          </div>
+          <div class="tip-item">
+            <strong>Financial Literacy:</strong> Understand business fundamentals, accounting, and market analysis.
+          </div>
+          <div class="tip-item">
+            <strong>Global Perspective:</strong> Study abroad or take international business courses.
+          </div>
+        `;
+      } else if (interest === 'arts') {
+        tips = `
+          <div class="tip-item">
+            <strong>Portfolio Development:</strong> Create a diverse portfolio showcasing different styles and mediums.
+          </div>
+          <div class="tip-item">
+            <strong>Digital Skills:</strong> Master industry-standard software like Adobe Creative Suite.
+          </div>
+          <div class="tip-item">
+            <strong>Online Presence:</strong> Build a professional website and social media presence.
+          </div>
+          <div class="tip-item">
+            <strong>Industry Connections:</strong> Attend art shows, galleries, and creative industry events.
+          </div>
+        `;
+      } else if (interest === 'engineering') {
+        tips = `
+          <div class="tip-item">
+            <strong>Hands-on Projects:</strong> Build practical projects to demonstrate your technical skills.
+          </div>
+          <div class="tip-item">
+            <strong>Professional Certifications:</strong> Obtain relevant certifications in your engineering field.
+          </div>
+          <div class="tip-item">
+            <strong>Industry Experience:</strong> Seek co-op programs and internships in engineering firms.
+          </div>
+          <div class="tip-item">
+            <strong>Technical Skills:</strong> Master CAD software and industry-specific tools.
+          </div>
+        `;
+      }
+      
+      return tips;
+    }
+
+    function restartQuestionnaire() {
+      currentQuestion = 1;
+      answers = {};
+      assessmentCompleted = false;
+      document.getElementById('questionnaire').style.display = 'block';
+      document.getElementById('resultsSection').style.display = 'none';
+      document.getElementById('resultsSection').classList.remove('active');
+      showCurrentQuestion();
+      updateProgress();
+      
+      // Clear all selections
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      
+      // Clear saved data
+      localStorage.removeItem('careerAssessmentAnswers');
+      localStorage.removeItem('careerAssessmentCurrentQuestion');
+      localStorage.removeItem('careerAssessmentCompleted');
+      localStorage.removeItem('careerAssessmentResults');
+    }
+
+    // Initialize
+    // Hide both sections initially to prevent flashing
+    document.getElementById('questionnaire').style.display = 'none';
+    document.getElementById('resultsSection').style.display = 'none';
+    document.getElementById('resultsSection').classList.remove('active');
+    
+    // Try to load saved assessment first
+    if (!loadSavedAssessment()) {
+      // No saved data, show the questionnaire
+      document.getElementById('questionnaire').style.display = 'block';
+      showCurrentQuestion();
+      updateProgress();
+    }
+  </script>
+</body>
+</html> 

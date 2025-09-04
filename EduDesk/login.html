@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In - EduDesk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Fraunces:wght@500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(120deg, #f8f9fb 60%, #fff4e0 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+    }
+    .split-container {
+      display: flex;
+      min-height: 100vh;
+      width: 100vw;
+    }
+    .split-left {
+      flex: 1.2;
+      background: linear-gradient(135deg, #2d3250 60%, #f76e11 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      min-width: 320px;
+    }
+    .split-left img {
+      width: 340px;
+      max-width: 80%;
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(44, 50, 80, 0.10);
+      animation: fadeInLeft 1s;
+    }
+    .split-right {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      min-width: 340px;
+    }
+    .login-card {
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(44, 50, 80, 0.13);
+      padding: 48px 36px 36px 36px;
+      max-width: 370px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeInUp 1s;
+    }
+    .login-logo {
+      margin-bottom: 18px;
+    }
+    .login-logo img {
+      height: 56px;
+      display: block;
+      margin: 0 auto;
+    }
+    .login-card h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 2.1rem;
+      color: #2d3250;
+      margin-bottom: 8px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .login-card p {
+      color: #4a4a4a;
+      font-size: 1.08rem;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+    .social-login {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 18px;
+      width: 100%;
+      justify-content: center;
+    }
+    .social-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #f8f9fb;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 10px 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #2d3250;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .social-btn:hover {
+      background: #fff4e0;
+      border-color: #f76e11;
+      color: #f76e11;
+    }
+    .divider {
+      width: 100%;
+      text-align: center;
+      color: #aaa;
+      margin: 18px 0 18px 0;
+      font-size: 0.98rem;
+      position: relative;
+    }
+    .divider:before, .divider:after {
+      content: '';
+      display: inline-block;
+      width: 30%;
+      height: 1px;
+      background: #e0e0e0;
+      vertical-align: middle;
+      margin: 0 8px;
+    }
+    .login-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-bottom: 10px;
+    }
+    .login-form label {
+      font-weight: 600;
+      color: #2d3250;
+      margin-bottom: 4px;
+      font-size: 1rem;
+    }
+    .login-form input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 2px solid #e0e0e0;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+      background: #f8f9fb;
+    }
+    .login-form input:focus {
+      border-color: #f76e11;
+      outline: none;
+      background: #fff;
+    }
+    .forgot-link {
+      color: #f76e11;
+      text-align: right;
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.98rem;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .forgot-link:hover {
+      color: #2d3250;
+      text-decoration: underline;
+    }
+    .login-btn {
+      width: 100%;
+      padding: 14px 0;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #f76e11 60%, #ffb84c 100%);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      margin-top: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(247, 110, 17, 0.10);
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .login-btn:hover {
+      background: linear-gradient(90deg, #ffb84c 60%, #f76e11 100%);
+      color: #2d3250;
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 6px 20px rgba(247, 110, 17, 0.18);
+    }
+    .signup-link {
+      text-align: center;
+      margin-top: 10px;
+      color: #4a4a4a;
+      font-size: 1rem;
+    }
+    .signup-link a {
+      color: #f76e11;
+      font-weight: 600;
+      text-decoration: none;
+      margin-left: 4px;
+      transition: color 0.2s;
+    }
+    .signup-link a:hover {
+      color: #2d3250;
+      text-decoration: underline;
+    }
+    @media (max-width: 900px) {
+      .split-container {
+        flex-direction: column;
+      }
+      .split-left {
+        min-height: 180px;
+        justify-content: flex-start;
+        padding: 32px 0 0 0;
+      }
+      .split-right {
+        min-height: 420px;
+        justify-content: center;
+        padding: 24px 0;
+      }
+    }
+    @media (max-width: 600px) {
+      .split-container {
+        flex-direction: column;
+      }
+      .split-left {
+        display: none;
+      }
+      .split-right {
+        min-width: 100vw;
+        padding: 0;
+      }
+      .login-card {
+        border-radius: 0;
+        box-shadow: none;
+        padding: 32px 10px 24px 10px;
+        min-height: 100vh;
+      }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="split-container">
+    <div class="split-left">
+      <img src="BoySuccess.png" alt="EduDesk Illustration">
+    </div>
+    <div class="split-right">
+      <div class="login-card">
+        <div class="login-logo">
+          <img src="The EDUDESK..png" alt="EduDesk Logo">
+        </div>
+        <h2>Welcome Back</h2>
+        <p>Sign in to continue your journey</p>
+        <form class="login-form">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="Enter your email" required>
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required>
+          <a href="forgot-password.html" class="forgot-link">Forgot Password?</a>
+          <button type="submit" class="login-btn">Sign In</button>
+        </form>
+        <div class="signup-link">
+          Don't have an account?
+          <a href="signup.html">Sign up</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Include API configuration -->
+  <script src="api-config.js"></script>
+  <script>
+    document.querySelector('.login-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      
+      if (!email || !password) {
+        alert('Please fill in all fields.');
+        return;
+      }
+      
+      // Show loading state
+      const submitBtn = document.querySelector('.login-btn');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Signing In...';
+      submitBtn.disabled = true;
+      
+      try {
+        const result = await AuthAPI.login(email, password);
+        
+        if (result.success) {
+          alert('Login successful! Welcome back to EduDesk!');
+          window.location.href = 'dashboard.html';
+        } else {
+          alert(result.error || 'Login failed. Please check your credentials.');
+        }
+      } catch (error) {
+        alert('An error occurred. Please make sure the Flask backend is running on port 5001.');
+        console.error('Login error:', error);
+      } finally {
+        // Reset button state
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

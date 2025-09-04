@@ -1,0 +1,2326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduDesk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500&family=Pacifico&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link href="http://localhost:5001/api/homepage">
+  <style>
+    :root {
+      --primary-color: #2D3250;
+      --secondary-color: #F76E11;
+      --accent-color: #FFB84C;
+      --background-light: #F7F7F7;
+      --background-accent: #FFF4E0;
+      --text-dark: #1A1A2E;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: var(--background-light);
+      overflow-x: hidden;
+    }
+
+    nav {
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.95);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 40px;
+      box-sizing: border-box;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    nav .logo {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: transform 0.3s ease;
+    }
+
+    nav .logo:hover {
+      transform: scale(1.05);
+    }
+
+    nav img {
+      height: 48px;
+      transition: transform 0.3s ease;
+    }
+
+    nav h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 28px;
+      margin: 0;
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+
+    nav .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    nav .nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 16px;
+      color: var(--text-dark);
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    nav .nav-links a:hover {
+      color: var(--secondary-color);
+    }
+
+    nav .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--secondary-color);
+      transition: width 0.3s ease;
+    }
+
+    nav .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    nav .actions {
+      display: flex;
+      gap: 16px;
+    }
+
+    nav .actions a {
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .signin {
+      color: var(--primary-color);
+      border: 2px solid var(--primary-color);
+      background-color: transparent;
+    }
+
+    .signin:hover {
+      background-color: var(--primary-color);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .getstarted {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+
+    .getstarted:hover {
+      background-color: #e05d00;
+      transform: translateY(-2px);
+    }
+
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary-color) 0%, #1A1A2E 100%);
+      color: white;
+      padding: 120px 40px 80px;
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="%23FFFFFF" fill-opacity="0.05"/></svg>');
+      opacity: 0.5;
+    }
+
+    .hero-container {
+      max-width: 1200px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-content h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 56px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 24px;
+      line-height: 1.1;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .hero-content .highlight {
+      color: var(--accent-color);
+    }
+
+    .hero-content p {
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 600px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s ease 0.2s forwards;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 20px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s ease 0.4s forwards;
+    }
+
+    .cta-primary {
+      background: var(--secondary-color);
+      color: white;
+      padding: 16px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cta-primary:hover {
+      background: #e05d00;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(247, 110, 17, 0.3);
+    }
+
+    .cta-secondary {
+      background: transparent;
+      color: white;
+      padding: 16px 32px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cta-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--accent-color);
+      transform: translateY(-2px);
+    }
+
+    .hero-image {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transform: translateX(30px);
+      animation: fadeInRight 0.8s ease 0.6s forwards;
+    }
+
+    .hero-image img {
+      width: 100%;
+      max-width: 500px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .intro-section {
+      background: linear-gradient(135deg, var(--primary-color) 0%, #1A1A2E 100%);
+      color: white;
+      padding: 80px 50px;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intro-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="%23FFFFFF" fill-opacity="0.05"/></svg>');
+      opacity: 0.5;
+    }
+
+    .intro-content {
+      flex: 1;
+      padding-right: 40px;
+    }
+
+    .intro-section h2 {
+      color: var(--accent-color);
+      font-size: 42px;
+      font-weight: 800;
+      font-family: 'Fraunces', serif;
+      margin-bottom: 32px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .intro-section p.main {
+      font-size: 28px;
+      font-weight: 500;
+      margin: 32px 0 16px;
+      line-height: 1.4;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s ease 0.2s forwards;
+    }
+
+    .intro-section p.sub {
+      font-size: 16px;
+      font-weight: 400;
+      max-width: 500px;
+      margin: 0 0 32px;
+      line-height: 1.6;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s ease 0.4s forwards;
+    }
+
+    .intro-section .underline {
+      width: 100px;
+      height: 4px;
+      background-color: var(--accent-color);
+      border-radius: 20px;
+      margin: 0 0 32px;
+      opacity: 0;
+      transform: scaleX(0);
+      animation: scaleIn 0.8s ease 0.6s forwards;
+    }
+
+    .intro-inner {
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .intro-section img {
+      width: 320px;
+      max-width: 100%;
+      opacity: 0;
+      transform: translateX(20px);
+      animation: fadeInRight 0.8s ease 0.8s forwards;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .services-section {
+      background: white;
+      padding: 100px 40px;
+      position: relative;
+    }
+
+    .services-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .services-header h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 48px;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .services-header p {
+      font-size: 20px;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 40px;
+      margin-bottom: 80px;
+    }
+
+    .service-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px 32px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    .service-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      font-size: 32px;
+      color: white;
+    }
+
+    .service-card h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 24px;
+      color: var(--primary-color);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .service-card p {
+      font-size: 16px;
+      color: var(--text-light);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .service-link {
+      color: var(--secondary-color);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .service-link:hover {
+      color: var(--primary-color);
+      transform: translateX(4px);
+    }
+
+    .service-text {
+      color: var(--secondary-color);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    /* Team Section */
+    .team-section {
+      background: var(--background-light);
+      padding: 100px 40px;
+      position: relative;
+    }
+
+    .team-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .team-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .team-header h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 48px;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .team-header p {
+      font-size: 20px;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 60px;
+      margin-bottom: 40px;
+    }
+
+    .team-member {
+      background: white;
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .team-member::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+    }
+
+    .team-member:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    .member-photo {
+      margin-bottom: 24px;
+    }
+
+    .member-photo img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--background-light);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    .member-info h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 24px;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .member-info .role {
+      font-size: 16px;
+      color: var(--secondary-color);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .member-info .bio {
+      font-size: 16px;
+      color: var(--text-light);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .member-social {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      background: var(--background-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-light);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .social-link:hover {
+      background: var(--secondary-color);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .cta-section {
+      background: linear-gradient(135deg, var(--background-accent) 0%, #FFF4E0 100%);
+      padding: 80px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 36px;
+      color: var(--text-dark);
+      margin-bottom: 32px;
+    }
+
+    .cta-section a {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 14px 36px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(247, 110, 17, 0.2);
+    }
+
+    .cta-section a::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    .cta-section a:hover::after {
+      transform: translateX(100%);
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 14px;
+      background-color: var(--background-accent);
+      color: var(--primary-color);
+    }
+
+    /* About Us */
+    .about-section {
+      background: #fff;
+      padding: 80px 20px;
+    }
+    .about-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .about-title {
+      font-family: 'Fraunces', serif;
+      font-size: 36px;
+      color: var(--text-dark);
+      margin: 0 0 14px 0;
+    }
+    .about-sub {
+      font-size: 18px;
+      color: #4A4A4A;
+      line-height: 1.7;
+      margin: 0 0 18px 0;
+      max-width: 620px;
+    }
+    .about-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 10px 0;
+      display: grid;
+      gap: 10px;
+    }
+    .about-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-dark);
+      font-weight: 600;
+    }
+    .about-list li i {
+      color: var(--secondary-color);
+    }
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .about-stat {
+      background: var(--background-light);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+    .about-stat .value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary-color);
+      margin-bottom: 6px;
+    }
+    .about-stat .label {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+    .about-image img {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      display: block;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+      to {
+        opacity: 1;
+        transform: scaleX(1);
+      }
+    }
+
+    /* Survey Modal Styles */
+    .survey-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .survey-modal.active {
+      display: flex;
+    }
+
+    .survey-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+    }
+
+    .survey-container {
+      background: white;
+      border-radius: 24px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: modalSlideIn 0.4s ease;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .survey-header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, #1A1A2E 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 24px 24px 0 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .survey-header h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .survey-header p {
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+
+    .close-survey {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .close-survey:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .survey-form {
+      padding: 2rem;
+    }
+
+    .survey-step {
+      display: none;
+    }
+
+    .survey-step.active {
+      display: block;
+      animation: stepFadeIn 0.3s ease;
+    }
+
+    @keyframes stepFadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .survey-step h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--background-light);
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 0 3px rgba(247, 110, 17, 0.1);
+    }
+
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .checkbox-item:hover {
+      background: var(--background-light);
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      display: none;
+    }
+
+    .checkmark {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--text-light);
+      border-radius: 4px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .checkbox-item input[type="checkbox"]:checked + .checkmark {
+      background: var(--secondary-color);
+      border-color: var(--secondary-color);
+    }
+
+    .checkbox-item input[type="checkbox"]:checked + .checkmark::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .radio-group {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      padding: 0.75rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .radio-item:hover {
+      background: var(--background-light);
+    }
+
+    .radio-item input[type="radio"] {
+      display: none;
+    }
+
+    .radio-mark {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--text-light);
+      border-radius: 50%;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .radio-item input[type="radio"]:checked + .radio-mark {
+      border-color: var(--secondary-color);
+    }
+
+    .radio-item input[type="radio"]:checked + .radio-mark::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      background: var(--secondary-color);
+      border-radius: 50%;
+    }
+
+    .survey-navigation {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--background-light);
+    }
+
+    .step-indicator {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .step-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--background-light);
+      transition: all 0.3s ease;
+    }
+
+    .step-dot.active {
+      background: var(--secondary-color);
+      transform: scale(1.2);
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background: var(--secondary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #e05d00;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(247, 110, 17, 0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--primary-color);
+      border: 2px solid var(--primary-color);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* Photo Upload Styles */
+    .photo-upload-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .photo-preview {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px dashed var(--text-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .photo-preview:hover {
+      border-color: var(--secondary-color);
+      transform: scale(1.05);
+    }
+
+    .photo-placeholder {
+      text-align: center;
+      color: var(--text-light);
+    }
+
+    .photo-placeholder i {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .photo-placeholder p {
+      font-size: 0.8rem;
+      margin: 0;
+    }
+
+    .photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .photo-preview.has-image {
+      border: 3px solid var(--secondary-color);
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 1024px) {
+      .hero-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+      }
+      
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+      }
+      
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      /* Navigation */
+      nav {
+        padding: 12px 20px;
+      }
+      
+      nav .nav-links {
+        display: none;
+      }
+      
+      .navbar {
+        padding: 12px 20px;
+      }
+      
+      /* Hero Section */
+      .hero-section {
+        padding: 80px 20px 40px;
+        min-height: 70vh;
+      }
+      
+      .hero-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: center;
+      }
+      
+      .hero-content h1 {
+        font-size: 36px;
+        line-height: 1.2;
+      }
+      
+      .hero-content p {
+        font-size: 16px;
+        margin-bottom: 24px;
+      }
+      
+      .hero-cta {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      
+      .cta-primary, .cta-secondary {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+        padding: 12px 24px;
+        font-size: 16px;
+      }
+      
+      /* Services Section */
+      .services-section {
+        padding: 60px 20px;
+      }
+      
+      .services-header h2 {
+        font-size: 32px;
+        margin-bottom: 16px;
+      }
+      
+      .services-header p {
+        font-size: 16px;
+      }
+      
+      .services-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .service-card {
+        padding: 24px 20px;
+      }
+      
+      .service-card h3 {
+        font-size: 18px;
+        margin-bottom: 12px;
+      }
+      
+      .service-card p {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      
+      /* Team Section */
+      .team-section {
+        padding: 60px 20px;
+      }
+      
+      .team-header h2 {
+        font-size: 32px;
+        margin-bottom: 16px;
+      }
+      
+      .team-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      
+      .team-member {
+        padding: 24px 20px;
+      }
+      
+      .member-photo img {
+        width: 80px;
+        height: 80px;
+      }
+      
+      .member-info h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+      
+      .member-info .role {
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+      
+      .member-info .bio {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      
+      /* Intro Section */
+      .intro-section {
+        min-height: auto;
+        padding: 50px 20px;
+      }
+      
+      .intro-inner {
+        flex-direction: column;
+        text-align: center;
+        gap: 24px;
+      }
+      
+      .intro-content {
+        padding-right: 0;
+      }
+      
+      .intro-section h2 {
+        font-size: 24px;
+        margin-bottom: 16px;
+      }
+      
+      .intro-section p.main {
+        font-size: 18px;
+        line-height: 1.5;
+      }
+      
+      .intro-section .underline {
+        margin: 0 auto 16px;
+      }
+      
+      /* About Section */
+      .about-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 20px;
+      }
+      
+      .about-title {
+        font-size: 28px;
+        margin-bottom: 16px;
+      }
+      
+      .about-sub {
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 16px;
+        line-height: 1.5;
+      }
+      
+      .about-list {
+        margin: 20px 0;
+      }
+      
+      .about-list li {
+        justify-content: center;
+        font-size: 16px;
+        margin-bottom: 12px;
+      }
+      
+      .about-image img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      /* Survey Modal */
+      .survey-container {
+        margin: 10px;
+        max-height: 95vh;
+        border-radius: 12px;
+      }
+
+      .survey-header {
+        padding: 1.5rem;
+      }
+
+      .survey-header h2 {
+        font-size: 1.5rem;
+      }
+
+      .survey-form {
+        padding: 1.5rem;
+      }
+      
+      .survey-form .form-group {
+        margin-bottom: 16px;
+      }
+      
+      .survey-form label {
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+      
+      .survey-form input, .survey-form select, .survey-form textarea {
+        padding: 12px;
+        font-size: 16px;
+      }
+      
+      .survey-form .form-actions {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .survey-form .btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      /* Extra small devices */
+      .hero-content h1 {
+        font-size: 28px;
+      }
+      
+      .hero-content p {
+        font-size: 14px;
+      }
+      
+      .services-header h2, .team-header h2 {
+        font-size: 28px;
+      }
+      
+      .about-title {
+        font-size: 24px;
+      }
+      
+      .service-card, .team-member {
+        padding: 20px 16px;
+      }
+      
+      .cta-primary, .cta-secondary {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+      
+      .survey-container {
+        margin: 5px;
+        border-radius: 8px;
+      }
+      
+      .survey-header, .survey-form {
+        padding: 1rem;
+      }
+    }
+
+      .checkbox-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .survey-navigation {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .step-indicator {
+        order: -1;
+      }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <img src="The EDUDESK..png" alt="EduDesk Logo">
+      <h1>EduDesk</h1>
+    </div>
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#team">Team</a>
+      <a href="#about">About</a>
+    </div>
+    <div class="actions">
+      <a href="login.html" class="signin">Sign In</a>
+      <a href="#" class="getstarted" onclick="showSurvey()">Get Started</a>
+    </div>
+  </nav>
+
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-content">
+        <h1 data-aos="fade-up">Your Complete <span class="highlight">Student Success</span> Platform</h1>
+        <p data-aos="fade-up" data-aos-delay="200">Transform your academic journey with EduDesk's comprehensive toolkit. Plan smarter, study better, and achieve your goals with confidence.</p>
+        <div class="hero-cta" data-aos="fade-up" data-aos-delay="400">
+          <a href="#" class="cta-primary" onclick="showSurvey()">
+            <i class="fas fa-rocket"></i>
+            Get Started Free
+          </a>
+          <a href="#services" class="cta-secondary">
+            <i class="fas fa-play"></i>
+            Learn More
+          </a>
+        </div>
+      </div>
+      <div class="hero-image" data-aos="fade-left" data-aos-delay="600">
+        <img src="BoyWorking.png" alt="Student Success">
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="services-section">
+    <div class="services-container">
+      <div class="services-header" data-aos="fade-up">
+        <h2>Everything You Need to Succeed</h2>
+        <p>Comprehensive tools designed specifically for students to excel in their academic journey</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="service-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <h3>Smart Study Timer</h3>
+          <p>Boost your focus with our intelligent study timer that adapts to your learning patterns and helps you maintain optimal concentration.</p>
+          <div class="service-text">
+            Try Study Timer
+          </div>
+        </div>
+        <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="service-icon">
+            <i class="fas fa-heart"></i>
+          </div>
+          <h3>Mood Tracker</h3>
+          <p>Monitor your emotional wellbeing and identify patterns that affect your academic performance with our comprehensive mood tracking system.</p>
+          <div class="service-text">
+            Track Your Mood
+          </div>
+        </div>
+        <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="service-icon">
+            <i class="fas fa-bullseye"></i>
+          </div>
+          <h3>Goal Setting</h3>
+          <p>Set, track, and achieve your academic and personal goals with our structured goal-setting framework designed for student success.</p>
+          <div class="service-text">
+            Set Your Goals
+          </div>
+        </div>
+        <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+          <div class="service-icon">
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+          <h3>Calendar & Planning</h3>
+          <p>Organize your schedule, track deadlines, and never miss important academic events with our intuitive calendar system.</p>
+          <div class="service-text">
+            View Calendar
+          </div>
+        </div>
+        <div class="service-card" data-aos="fade-up" data-aos-delay="500">
+          <div class="service-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3>Progress Analytics</h3>
+          <p>Gain insights into your academic performance with detailed analytics and progress tracking across all your activities.</p>
+          <div class="service-text">
+            View Analytics
+          </div>
+        </div>
+        <div class="service-card" data-aos="fade-up" data-aos-delay="600">
+          <div class="service-icon">
+            <i class="fas fa-book"></i>
+          </div>
+          <h3>Study Resources</h3>
+          <p>Access curated study materials, tips, and resources to enhance your learning experience and academic performance.</p>
+          <div class="service-text">
+            Explore Resources
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="intro-section" style="padding: 40px 24px; min-height: 50vh;">
+    <div class="intro-inner">
+      <div class="intro-content">
+      <h2 style="font-size: 36px;" data-aos="fade-right">What is EduDesk?</h2>
+      <p class="main" style="font-size: 26px; margin: 20px 0 10px;" data-aos="fade-up" data-aos-delay="100">EduDesk is your all-in-one<br>command center for student success.</p>
+      <p class="sub" style="font-size: 18px; margin: 0 0 18px;" data-aos="fade-up" data-aos-delay="200">A personalized digital toolkit that empowers students to organize, reflect, and thrive through smart study, wellbeing, and creative expression.</p>
+      <div class="underline" style="width: 60px; height: 3px; margin: 0 0 18px;" data-aos="zoom-in" data-aos-delay="300"></div>
+      </div>
+      <img src="BoySuccess.png" alt="Boy Success" style="width: 180px;" data-aos="zoom-in-left" data-aos-delay="200">
+    </div>
+  </section>
+
+  <!-- Removed Quick Links Section -->
+
+  <!-- Meet the Team Section -->
+  <section id="team" class="team-section">
+    <div class="team-container">
+      <div class="team-header" data-aos="fade-up">
+        <h2>Meet the Team</h2>
+        <p>The passionate individuals behind EduDesk's mission to transform student success</p>
+      </div>
+      <div class="team-grid">
+        <div class="team-member" data-aos="fade-up" data-aos-delay="100">
+          <div class="member-photo">
+            <img src="IMG_0192.JPG" alt="Founder">
+          </div>
+          <div class="member-info">
+            <h3>You</h3>
+            <p class="role">Founder and Developer</p>
+            <p class="bio">Hi, I am Siddharth Ajith and I study at GEMS Founders School, Al Barsha. I’ve always thought that, rather than only being a solution to problems, technology should uplift students and help them achieve their potential. This is the reason I founded EduDesk; a platform dedicated to helping students remain organized, motivated, and connected. As the Founder of EduDesk, I envision EduDesk as a place where academia and creativity collide and where each student is both an individual and a part of a bigger, stronger, community.</p>
+            <div class="member-social">
+              <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="team-member" data-aos="fade-up" data-aos-delay="200">
+          <div class="member-photo">
+            <img src="ranveer.jpeg" alt="Ranveer Motwani">
+          </div>
+          <div class="member-info">
+            <h3>Ranveer Motwani</h3>
+            <p class="role">Media and Marketing Manager</p>
+            <p class="bio">Hey! My name is Ranveer and I’m a student at Delhi Private School, Sharjah. I’ve always believed that education should be just as much as expression and creativity as it is about academics. Creativity isn’t just about design or content, it’s about telling a story that connects people. As the Media & Marketing Head of EduDesk, I’m excited to shape how our ideas are shared, making sure our platform not only reaches more students but also inspires them to stay organized and build a better and stronger community.</p>
+            <div class="member-social">
+              <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="team-member" data-aos="fade-up" data-aos-delay="300">
+          <div class="member-photo">
+            <img src="aditya.jpeg" alt="Aditya Parekh">
+          </div>
+          <div class="member-info">
+            <h3>Aditya Parekh</h3>
+            <p class="role">Outreach Manager</p>
+            <p class="bio">Hey everyone! My name is Aditya and I’m an IBDP student at GEMS Modern Academy. For me, education isn’t just something we learn from the books. It’s about observations, experiences, and perspective. I’m proud to be the Head of Outreach for EduDesk as I hope it provides everyone a better platform to organize themselves and become more efficient!</p>
+            <div class="member-social">
+              <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Us Section -->
+  <section id="about" class="about-section">
+    <div class="about-container">
+      <div class="about-text" data-aos="fade-up">
+        <h2 class="about-title">About the project</h2>
+        <p class="about-sub">EduDesk is built by Siddharth Ajith, who believes that small, consistent habits lead to big achievements. Our mission is to help students plan smart, reflect often, and grow with confidence.</p>
+        <ul class="about-list">
+          <li><i class="fas fa-check-circle"></i> Built for real student workflows</li>
+          <li><i class="fas fa-check-circle"></i> Focus on wellbeing and productivity</li>
+          <li><i class="fas fa-check-circle"></i> Simple, beautiful, and distraction-free</li>
+        </ul>
+      </div>
+      <div class="about-image" data-aos="fade-left" data-aos-delay="150">
+        <img src="BoyWorking.png" alt="Students working together">
+      </div>
+    </div>
+  </section>
+
+  <!-- Student Tips Widget -->
+  <section style="background: var(--background-accent); padding: 20px 0 0;" data-aos="fade-up" data-aos-delay="100">
+    <div style="max-width: 400px; margin: 0 auto; background: white; border-radius: 14px; box-shadow: 0 4px 16px rgba(45,50,80,0.08); padding: 18px 14px; text-align: center;">
+      <h3 style="color: var(--secondary-color); font-family: 'Fraunces', serif; font-size: 1.4rem; margin-bottom: 10px;">Student Tip of the Day</h3>
+      <p style="color: var(--primary-color); font-size: 1.15rem; margin-bottom: 0;">Break big tasks into smaller steps and celebrate each small win. Progress is progress!</p>
+    </div>
+  </section>
+
+  <section class="cta-section" style="padding: 40px 10px;">
+    <h2 style="font-size: 30px; margin-bottom: 18px;" data-aos="zoom-in">Join EduDesk Today.</h2>
+    <a href="#" onclick="showSurvey()" style="padding: 16px 36px; font-size: 20px; border-radius: 10px;" data-aos="fade-up" data-aos-delay="100">Get Started</a>
+  </section>
+
+  <!-- Survey Modal -->
+  <div id="survey-modal" class="survey-modal">
+    <div class="survey-overlay"></div>
+    <div class="survey-container">
+      <div class="survey-header">
+        <h2>Welcome to EduDesk! 🎉</h2>
+        <p>Let's get to know you better to personalize your experience</p>
+        <button class="close-survey" onclick="closeSurvey()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <form id="user-survey-form" class="survey-form">
+        <div class="survey-step active" data-step="1">
+          <h3>Personal Information</h3>
+          <div class="form-group">
+            <label>Profile Picture</label>
+            <div class="photo-upload-container">
+              <div class="photo-preview" id="photo-preview">
+                <div class="photo-placeholder">
+                  <i class="fas fa-user"></i>
+                  <p>Click to upload photo</p>
+                </div>
+                <img id="photo-preview-img" style="display: none;" alt="Profile Preview">
+              </div>
+              <input type="file" id="profile-photo" name="profilePhoto" accept="image/*" style="display: none;">
+              <button type="button" class="btn btn-secondary" onclick="document.getElementById('profile-photo').click()">
+                <i class="fas fa-camera"></i>
+                Choose Photo
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" min="13" max="100">
+          </div>
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" name="location" placeholder="City, Country">
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone">
+          </div>
+        </div>
+
+        <div class="survey-step" data-step="2">
+          <h3>Academic Information</h3>
+          <div class="form-group">
+            <label for="academic-level">Academic Level *</label>
+            <select id="academic-level" name="academicLevel" required>
+              <option value="">Select your level</option>
+              <option value="High School">High School</option>
+              <option value="Undergraduate">Undergraduate</option>
+              <option value="Graduate">Graduate</option>
+              <option value="PhD">PhD</option>
+              <option value="Professional">Professional</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="field-of-study">Field of Study</label>
+            <input type="text" id="field-of-study" name="fieldOfStudy" placeholder="e.g., Computer Science, Medicine, Business">
+          </div>
+          <div class="form-group">
+            <label for="institution">Institution</label>
+            <input type="text" id="institution" name="institution" placeholder="Your school or university">
+          </div>
+          <div class="form-group">
+            <label for="graduation-year">Expected Graduation Year</label>
+            <input type="number" id="graduation-year" name="graduationYear" min="2024" max="2030">
+          </div>
+          <div class="form-group">
+            <label for="gpa">Current GPA</label>
+            <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="4" placeholder="e.g., 3.75">
+          </div>
+        </div>
+
+        <div class="survey-step" data-step="3">
+          <h3>Interests & Goals</h3>
+          <div class="form-group">
+            <label>What are your main interests? (Select all that apply)</label>
+            <div class="checkbox-grid">
+              <label class="checkbox-item">
+                <input type="checkbox" name="interests" value="Technology">
+                <span class="checkmark"></span>
+                Technology
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="interests" value="Science">
+                <span class="checkmark"></span>
+                Science
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="interests" value="Arts">
+                <span class="checkmark"></span>
+                Arts
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="interests" value="Sports">
+                <span class="checkmark"></span>
+                Sports
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="interests" value="Music">
+                <span class="checkmark"></span>
+                Music
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="interests" value="Reading">
+                <span class="checkmark"></span>
+                Reading
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="interests" value="Gaming">
+                <span class="checkmark"></span>
+                Gaming
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="interests" value="Travel">
+                <span class="checkmark"></span>
+                Travel
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="study-goals">What are your main study goals?</label>
+            <textarea id="study-goals" name="studyGoals" rows="3" placeholder="e.g., Improve grades, prepare for exams, learn new skills..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="study-style">How do you prefer to study?</label>
+            <select id="study-style" name="studyStyle">
+              <option value="">Select your preference</option>
+              <option value="Visual">Visual (diagrams, charts, videos)</option>
+              <option value="Auditory">Auditory (listening, discussions)</option>
+              <option value="Kinesthetic">Kinesthetic (hands-on, practice)</option>
+              <option value="Reading/Writing">Reading/Writing (notes, textbooks)</option>
+              <option value="Mixed">Mixed approach</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="survey-step" data-step="4">
+          <h3>Learning Preferences</h3>
+          <div class="form-group">
+            <label>What motivates you most in your studies?</label>
+            <div class="radio-group">
+              <label class="radio-item">
+                <input type="radio" name="motivation" value="Achievement">
+                <span class="radio-mark"></span>
+                Achieving high grades
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="motivation" value="Knowledge">
+                <span class="radio-mark"></span>
+                Gaining knowledge
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="motivation" value="Career">
+                <span class="radio-mark"></span>
+                Career advancement
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="motivation" value="Personal">
+                <span class="radio-mark"></span>
+                Personal growth
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="study-time">Preferred study time</label>
+            <select id="study-time" name="studyTime">
+              <option value="">Select your preference</option>
+              <option value="Early Morning">Early Morning (6-9 AM)</option>
+              <option value="Morning">Morning (9-12 PM)</option>
+              <option value="Afternoon">Afternoon (12-5 PM)</option>
+              <option value="Evening">Evening (5-9 PM)</option>
+              <option value="Night">Night (9 PM-12 AM)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="study-duration">Typical study session duration</label>
+            <select id="study-duration" name="studyDuration">
+              <option value="">Select your preference</option>
+              <option value="15-30 minutes">15-30 minutes</option>
+              <option value="30-60 minutes">30-60 minutes</option>
+              <option value="1-2 hours">1-2 hours</option>
+              <option value="2-4 hours">2-4 hours</option>
+              <option value="4+ hours">4+ hours</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="survey-navigation">
+          <button type="button" class="btn btn-secondary" id="prev-btn" onclick="previousStep()" style="display: none;">
+            <i class="fas fa-arrow-left"></i>
+            Previous
+          </button>
+          <div class="step-indicator">
+            <span class="step-dot active" data-step="1"></span>
+            <span class="step-dot" data-step="2"></span>
+            <span class="step-dot" data-step="3"></span>
+            <span class="step-dot" data-step="4"></span>
+          </div>
+          <button type="button" class="btn btn-primary" id="next-btn" onclick="nextStep()">
+            Next
+            <i class="fas fa-arrow-right"></i>
+          </button>
+          <button type="submit" class="btn btn-primary" id="submit-btn" style="display: none;">
+            <i class="fas fa-check"></i>
+            Complete Profile
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 EduDesk. All rights reserved.
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 100
+    });
+
+    // Real-time Data Tracking System
+    class EduDeskAnalytics {
+      constructor() {
+        this.initializeData();
+        this.updateDisplay();
+        this.startRealTimeUpdates();
+      }
+
+      initializeData() {
+        // Initialize or retrieve data from localStorage
+        this.data = {
+          studySessions: parseInt(localStorage.getItem('edudesk_study_sessions')) || 0,
+          goalsCreated: parseInt(localStorage.getItem('edudesk_goals_created')) || 0,
+          userSatisfaction: parseFloat(localStorage.getItem('edudesk_satisfaction')) || 0,
+          totalUsers: parseInt(localStorage.getItem('edudesk_total_users')) || 1,
+          satisfactionVotes: parseInt(localStorage.getItem('edudesk_satisfaction_votes')) || 0
+        };
+
+        // Simulate some realistic starting data if none exists
+        if (this.data.studySessions === 0) {
+          this.data.studySessions = Math.floor(Math.random() * 500) + 100;
+          this.data.goalsCreated = Math.floor(Math.random() * 200) + 50;
+          this.data.userSatisfaction = Math.floor(Math.random() * 20) + 80;
+          this.data.totalUsers = Math.floor(Math.random() * 50) + 20;
+          this.data.satisfactionVotes = Math.floor(Math.random() * 30) + 10;
+          this.saveData();
+        }
+      }
+
+      saveData() {
+        localStorage.setItem('edudesk_study_sessions', this.data.studySessions.toString());
+        localStorage.setItem('edudesk_goals_created', this.data.goalsCreated.toString());
+        localStorage.setItem('edudesk_satisfaction', this.data.userSatisfaction.toString());
+        localStorage.setItem('edudesk_total_users', this.data.totalUsers.toString());
+        localStorage.setItem('edudesk_satisfaction_votes', this.data.satisfactionVotes.toString());
+      }
+
+      updateDisplay() {
+        // Animate the numbers
+        this.animateNumber('study-sessions-count', this.data.studySessions, this.formatNumber);
+        this.animateNumber('goals-created-count', this.data.goalsCreated, this.formatNumber);
+        this.animateNumber('user-satisfaction', this.data.userSatisfaction, (val) => val.toFixed(0) + '%');
+      }
+
+      formatNumber(num) {
+        if (num >= 1000) {
+          return (num / 1000).toFixed(1) + 'k+';
+        }
+        return num.toString();
+      }
+
+      animateNumber(elementId, targetValue, formatter) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+
+        const startValue = 0;
+        const duration = 2000;
+        const startTime = performance.now();
+
+        const animate = (currentTime) => {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          
+          // Easing function for smooth animation
+          const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+          const currentValue = startValue + (targetValue - startValue) * easeOutQuart;
+          
+          element.textContent = formatter(currentValue);
+          
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          }
+        };
+
+        requestAnimationFrame(animate);
+      }
+
+      startRealTimeUpdates() {
+        // Simulate real-time updates every 30 seconds
+        setInterval(() => {
+          this.simulateActivity();
+          this.updateDisplay();
+        }, 30000);
+
+        // Track actual user interactions
+        this.trackUserInteractions();
+      }
+
+      simulateActivity() {
+        // Simulate realistic growth
+        const now = new Date();
+        const hour = now.getHours();
+        
+        // More activity during study hours (9 AM - 11 PM)
+        if (hour >= 9 && hour <= 23) {
+          // Random chance of new activity
+          if (Math.random() < 0.3) {
+            this.data.studySessions += Math.floor(Math.random() * 3) + 1;
+          }
+          if (Math.random() < 0.2) {
+            this.data.goalsCreated += Math.floor(Math.random() * 2) + 1;
+          }
+          if (Math.random() < 0.1) {
+            this.data.totalUsers += 1;
+          }
+        }
+
+        // Update satisfaction based on simulated feedback
+        if (Math.random() < 0.05) {
+          this.data.satisfactionVotes += 1;
+          const newRating = Math.floor(Math.random() * 20) + 80; // 80-100%
+          this.data.userSatisfaction = (this.data.userSatisfaction * (this.data.satisfactionVotes - 1) + newRating) / this.data.satisfactionVotes;
+        }
+
+        this.saveData();
+      }
+
+      trackUserInteractions() {
+        // Track when users visit different sections
+        const trackVisit = (section) => {
+          switch(section) {
+            case 'study-timer':
+              this.data.studySessions += 1;
+              break;
+            case 'goal-setting':
+              this.data.goalsCreated += 1;
+              break;
+            case 'satisfaction':
+              this.data.satisfactionVotes += 1;
+              const rating = Math.floor(Math.random() * 20) + 80;
+              this.data.userSatisfaction = (this.data.userSatisfaction * (this.data.satisfactionVotes - 1) + rating) / this.data.satisfactionVotes;
+              break;
+          }
+          this.saveData();
+          this.updateDisplay();
+        };
+
+        // Service links removed - no longer tracking clicks
+
+        // Track page visits
+        if (localStorage.getItem('edudesk_page_visit') !== 'true') {
+          localStorage.setItem('edudesk_page_visit', 'true');
+          this.data.totalUsers += 1;
+          this.saveData();
+        }
+      }
+
+      // Public methods for external tracking
+      trackStudySession() {
+        this.data.studySessions += 1;
+        this.saveData();
+        this.updateDisplay();
+      }
+
+      trackGoalCreated() {
+        this.data.goalsCreated += 1;
+        this.saveData();
+        this.updateDisplay();
+      }
+
+      trackSatisfaction(rating) {
+        this.data.satisfactionVotes += 1;
+        this.data.userSatisfaction = (this.data.userSatisfaction * (this.data.satisfactionVotes - 1) + rating) / this.data.satisfactionVotes;
+        this.saveData();
+        this.updateDisplay();
+      }
+    }
+
+    // Initialize the analytics system
+    const analytics = new EduDeskAnalytics();
+
+    // Make analytics globally available for other pages
+    window.EduDeskAnalytics = analytics;
+
+    // Survey System
+    let currentStep = 1;
+    const totalSteps = 4;
+
+    // Check if user needs to complete survey
+    function checkSurveyStatus() {
+      const userData = localStorage.getItem('edudesk_user_data');
+      const urlParams = new URLSearchParams(window.location.search);
+      const isEdit = urlParams.get('edit') === 'true';
+      const isSignup = urlParams.get('signup') === 'true';
+      
+      // Only show survey if explicitly requested (edit mode or signup)
+      if (isEdit || isSignup) {
+        showSurvey();
+      }
+    }
+
+    function showSurvey() {
+      const userData = localStorage.getItem('edudesk_user_data');
+      
+      // If user already has data, redirect to profile instead
+      if (userData) {
+        window.location.href = 'profile.html';
+        return;
+      }
+      
+      const modal = document.getElementById('survey-modal');
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSurvey() {
+      const modal = document.getElementById('survey-modal');
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    function nextStep() {
+      if (validateCurrentStep()) {
+        if (currentStep < totalSteps) {
+          currentStep++;
+          updateStepDisplay();
+        }
+      }
+    }
+
+    function previousStep() {
+      if (currentStep > 1) {
+        currentStep--;
+        updateStepDisplay();
+      }
+    }
+
+    function updateStepDisplay() {
+      // Hide all steps
+      document.querySelectorAll('.survey-step').forEach(step => {
+        step.classList.remove('active');
+      });
+
+      // Show current step
+      document.querySelector(`[data-step="${currentStep}"]`).classList.add('active');
+
+      // Update step indicators
+      document.querySelectorAll('.step-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index + 1 <= currentStep);
+      });
+
+      // Update navigation buttons
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const submitBtn = document.getElementById('submit-btn');
+
+      prevBtn.style.display = currentStep > 1 ? 'inline-flex' : 'none';
+      
+      if (currentStep === totalSteps) {
+        nextBtn.style.display = 'none';
+        submitBtn.style.display = 'inline-flex';
+      } else {
+        nextBtn.style.display = 'inline-flex';
+        submitBtn.style.display = 'none';
+      }
+    }
+
+    function validateCurrentStep() {
+      const currentStepElement = document.querySelector(`[data-step="${currentStep}"]`);
+      const requiredFields = currentStepElement.querySelectorAll('[required]');
+      
+      for (let field of requiredFields) {
+        if (!field.value.trim()) {
+          field.focus();
+          field.style.borderColor = '#e74c3c';
+          setTimeout(() => {
+            field.style.borderColor = '';
+          }, 3000);
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function collectFormData() {
+      const form = document.getElementById('user-survey-form');
+      const formData = new FormData(form);
+      const userData = {};
+
+      // Collect all form data
+      for (let [key, value] of formData.entries()) {
+        if (key === 'interests') {
+          if (!userData.interests) userData.interests = [];
+          userData.interests.push(value);
+        } else if (key !== 'profilePhoto') {
+          userData[key] = value;
+        }
+      }
+
+      // Handle photo upload separately
+      const photoInput = document.getElementById('profile-photo');
+      if (photoInput.files.length > 0) {
+        const file = photoInput.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          userData.profilePicture = e.target.result;
+          // Save data after photo is loaded
+          userData.studySessions = 0;
+          userData.goalsAchieved = 0;
+          userData.streakDays = 0;
+          userData.goals = [];
+          userData.createdAt = new Date().toISOString();
+          
+          saveUserData(userData);
+          showSuccessMessage();
+        };
+        reader.readAsDataURL(file);
+        return null; // Indicate async processing
+      } else {
+        userData.profilePicture = null;
+      }
+
+      // Add default values and computed fields
+      userData.studySessions = 0;
+      userData.goalsAchieved = 0;
+      userData.streakDays = 0;
+      userData.goals = [];
+      userData.createdAt = new Date().toISOString();
+
+      return userData;
+    }
+
+    function saveUserData(userData) {
+      localStorage.setItem('edudesk_user_data', JSON.stringify(userData));
+      localStorage.setItem('edudesk_survey_completed', 'true');
+    }
+
+    function showSuccessMessage() {
+      const modal = document.getElementById('survey-modal');
+      modal.innerHTML = `
+        <div class="survey-overlay"></div>
+        <div class="survey-container">
+          <div class="survey-header">
+            <h2>Welcome to EduDesk! 🎉</h2>
+            <p>Your profile has been created successfully</p>
+          </div>
+          <div style="padding: 2rem; text-align: center;">
+            <div style="font-size: 4rem; color: var(--secondary-color); margin-bottom: 1rem;">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Profile Created Successfully!</h3>
+            <p style="color: var(--text-light); margin-bottom: 2rem;">
+              Your personalized EduDesk experience is ready. Let's start your journey to academic success!
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+              <a href="profile.html" class="btn btn-primary">
+                <i class="fas fa-user"></i>
+                View Profile
+              </a>
+              <a href="dashboard.html" class="btn btn-secondary">
+                <i class="fas fa-tachometer-alt"></i>
+                Go to Dashboard
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Handle form submission
+    document.getElementById('user-survey-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      if (validateCurrentStep()) {
+        const userData = collectFormData();
+        
+        // If photo is being processed asynchronously, return early
+        if (userData === null) {
+          return;
+        }
+        
+        saveUserData(userData);
+        
+        // Update analytics with new user
+        if (window.EduDeskAnalytics) {
+          window.EduDeskAnalytics.data.totalUsers += 1;
+          window.EduDeskAnalytics.saveData();
+        }
+        
+        showSuccessMessage();
+      }
+    });
+
+    // Close modal when clicking overlay
+    document.querySelector('.survey-overlay').addEventListener('click', closeSurvey);
+
+    // Photo upload functionality
+    function handlePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          alert('Please select a valid image file.');
+          return;
+        }
+        
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          alert('Image size should be less than 5MB.');
+          return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('photo-preview-img');
+          const placeholder = document.querySelector('.photo-placeholder');
+          const photoPreview = document.getElementById('photo-preview');
+          
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+          placeholder.style.display = 'none';
+          photoPreview.classList.add('has-image');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Initialize survey check when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      checkSurveyStatus();
+      
+      // Add photo upload event listener
+      const photoInput = document.getElementById('profile-photo');
+      if (photoInput) {
+        photoInput.addEventListener('change', handlePhotoUpload);
+      }
+      
+      // Make photo preview clickable
+      const photoPreview = document.getElementById('photo-preview');
+      if (photoPreview) {
+        photoPreview.addEventListener('click', function() {
+          document.getElementById('profile-photo').click();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

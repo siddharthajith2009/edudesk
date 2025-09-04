@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - EduDesk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500&family=Pacifico&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="api-config.js"></script>
+  <style>
+    :root {
+      --primary-color: #2D3250;
+      --secondary-color: #F76E11;
+      --accent-color: #FFB84C;
+      --background-light: #F7F7F7;
+      --background-accent: #FFF4E0;
+      --text-dark: #1A1A2E;
+      --text-light: #6B7280;
+      --success-color: #10B981;
+      --warning-color: #F59E0B;
+      --info-color: #3B82F6;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, var(--background-light) 0%, var(--background-accent) 100%);
+      min-height: 100vh;
+      color: var(--text-dark);
+    }
+
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--primary-color);
+    }
+
+    .logo img {
+      height: 40px;
+    }
+
+    .logo h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--secondary-color);
+    }
+
+    .profile-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    .profile-header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, #1A1A2E 100%);
+      border-radius: 24px;
+      padding: 3rem;
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .profile-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="%23FFFFFF" fill-opacity="0.05"/></svg>');
+      opacity: 0.5;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid var(--accent-color);
+      margin: 0 auto 1.5rem;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .profile-name {
+      font-family: 'Fraunces', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .profile-title {
+      font-size: 1.2rem;
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .profile-stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .profile-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .profile-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+    }
+
+    .card-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-title i {
+      color: var(--secondary-color);
+    }
+
+    .info-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--background-light);
+    }
+
+    .info-item:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .info-value {
+      color: var(--text-light);
+      text-align: right;
+    }
+
+    .info-value.highlight {
+      color: var(--secondary-color);
+      font-weight: 600;
+    }
+
+    .interests-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .interest-tag {
+      background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .goals-section {
+      grid-column: 1 / -1;
+    }
+
+    .goals-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .goal-item {
+      background: var(--background-light);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border-left: 4px solid var(--secondary-color);
+      transition: transform 0.3s ease;
+    }
+
+    .goal-item:hover {
+      transform: translateX(4px);
+    }
+
+    .goal-title {
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .goal-description {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .goal-progress {
+      background: rgba(247, 110, 17, 0.1);
+      border-radius: 8px;
+      height: 8px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+
+    .goal-progress-bar {
+      background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+      height: 100%;
+      border-radius: 8px;
+      transition: width 0.3s ease;
+    }
+
+    .goal-status {
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: var(--secondary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #e05d00;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(247, 110, 17, 0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--primary-color);
+      border: 2px solid var(--primary-color);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-light);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .profile-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .profile-stats {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .profile-header {
+        padding: 2rem 1rem;
+      }
+      
+      .profile-name {
+        font-size: 2rem;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-content">
+      <a href="index.html" class="logo">
+        <img src="The EDUDESK..png" alt="EduDesk Logo">
+        <h1>EduDesk</h1>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="settings.html">Settings</a>
+        <a href="#" onclick="clearProfileData(); return false;">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="profile-container">
+    <div class="profile-header" data-aos="fade-up">
+      <div class="profile-avatar">
+        <img id="profile-avatar-img" src="" alt="Profile Picture">
+      </div>
+      <h1 class="profile-name" id="profile-name">Loading...</h1>
+      <p class="profile-title" id="profile-title">Student</p>
+      <div class="profile-stats">
+        <div class="stat-item">
+          <span class="stat-number" id="study-sessions">0</span>
+          <span class="stat-label">Study Sessions</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="goals-achieved">0</span>
+          <span class="stat-label">Goals Achieved</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="streak-days">0</span>
+          <span class="stat-label">Day Streak</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-content">
+      <div class="profile-card" data-aos="fade-up" data-aos-delay="100">
+        <h2 class="card-title">
+          <i class="fas fa-user"></i>
+          Personal Information
+        </h2>
+        <div class="info-grid" id="personal-info">
+          <!-- Personal info will be populated by JavaScript -->
+        </div>
+      </div>
+
+      <div class="profile-card" data-aos="fade-up" data-aos-delay="200">
+        <h2 class="card-title">
+          <i class="fas fa-graduation-cap"></i>
+          Academic Information
+        </h2>
+        <div class="info-grid" id="academic-info">
+          <!-- Academic info will be populated by JavaScript -->
+        </div>
+      </div>
+
+      <div class="profile-card" data-aos="fade-up" data-aos-delay="300">
+        <h2 class="card-title">
+          <i class="fas fa-heart"></i>
+          Interests & Hobbies
+        </h2>
+        <div class="interests-grid" id="interests-grid">
+          <!-- Interests will be populated by JavaScript -->
+        </div>
+      </div>
+
+      <div class="profile-card goals-section" data-aos="fade-up" data-aos-delay="400">
+        <h2 class="card-title">
+          <i class="fas fa-bullseye"></i>
+          My Goals
+        </h2>
+        <div class="goals-list" id="goals-list">
+          <!-- Goals will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons" data-aos="fade-up" data-aos-delay="500">
+      <a href="dashboard.html" class="btn btn-primary">
+        <i class="fas fa-tachometer-alt"></i>
+        Go to Dashboard
+      </a>
+      <a href="#" class="btn btn-secondary" onclick="editProfile()">
+        <i class="fas fa-edit"></i>
+        Edit Profile
+      </a>
+      <a href="#" class="btn btn-secondary" onclick="clearProfileData()" style="background: #e74c3c; border-color: #e74c3c; color: white;">
+        <i class="fas fa-refresh"></i>
+        Reset Profile
+      </a>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 100
+    });
+
+    // Load user profile data
+    function loadProfileData() {
+      // Check if user is logged in
+      if (!AuthAPI.isLoggedIn()) {
+        alert('Please log in to view your profile.');
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      const user = AuthAPI.getCurrentUser();
+      if (!user) {
+        alert('User data not found. Please log in again.');
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      // Use user data from authentication
+      const userData = {
+        name: user.name,
+        email: user.email,
+        academicLevel: 'Student', // Default value
+        studySessions: 0,
+        goalsCompleted: 0,
+        currentStreak: 0,
+        profilePicture: null
+      };
+
+      // Update profile header
+      document.getElementById('profile-name').textContent = userData.name || 'Student';
+      document.getElementById('profile-title').textContent = userData.academicLevel || 'Student';
+      
+      // Check if user actually uploaded a photo (not the default IMG_0192.JPG)
+      if (userData.profilePicture && userData.profilePicture !== 'IMG_0192.JPG' && !userData.profilePicture.includes('IMG_0192.JPG')) {
+        document.getElementById('profile-avatar-img').src = userData.profilePicture;
+      } else {
+        // Show default avatar if no photo uploaded or if it's the old default
+        document.getElementById('profile-avatar-img').src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiByeD0iNjAiIGZpbGw9IiNGN0Y3RjciLz4KPGNpcmNsZSBjeD0iNjAiIGN5PSI0NSIgcj0iMTgiIGZpbGw9IiM2QjcyODAiLz4KPHBhdGggZD0iTTMwIDkwQzMwIDc1LjY0MDYgNDEuNjQwNiA2NCA1NiA2NEg2NEM3OC4zNTk0IDY0IDkwIDc1LjY0MDYgOTAgOTBWOTBIMzBaIiBmaWxsPSIjNkI3MjgwIi8+Cjwvc3ZnPgo=';
+      }
+
+      // Update stats
+      document.getElementById('study-sessions').textContent = userData.studySessions || 0;
+      document.getElementById('goals-achieved').textContent = userData.goalsAchieved || 0;
+      document.getElementById('streak-days').textContent = userData.streakDays || 0;
+
+      // Populate personal information
+      const personalInfo = document.getElementById('personal-info');
+      personalInfo.innerHTML = `
+        <div class="info-item">
+          <span class="info-label">Full Name</span>
+          <span class="info-value">${userData.name || 'Not provided'}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Email</span>
+          <span class="info-value">${userData.email || 'Not provided'}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Age</span>
+          <span class="info-value">${userData.age || 'Not provided'}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Location</span>
+          <span class="info-value">${userData.location || 'Not provided'}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Phone</span>
+          <span class="info-value">${userData.phone || 'Not provided'}</span>
+        </div>
+      `;
+
+      // Populate academic information
+      const academicInfo = document.getElementById('academic-info');
+      academicInfo.innerHTML = `
+        <div class="info-item">
+          <span class="info-label">Academic Level</span>
+          <span class="info-value highlight">${userData.academicLevel || 'Not provided'}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Field of Study</span>
+          <span class="info-value">${userData.fieldOfStudy || 'Not provided'}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Institution</span>
+          <span class="info-value">${userData.institution || 'Not provided'}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Graduation Year</span>
+          <span class="info-value">${userData.graduationYear || 'Not provided'}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">GPA</span>
+          <span class="info-value highlight">${userData.gpa || 'Not provided'}</span>
+        </div>
+      `;
+
+      // Populate interests
+      const interestsGrid = document.getElementById('interests-grid');
+      if (userData.interests && userData.interests.length > 0) {
+        interestsGrid.innerHTML = userData.interests.map(interest => 
+          `<div class="interest-tag">${interest}</div>`
+        ).join('');
+      } else {
+        interestsGrid.innerHTML = '<div class="empty-state"><i class="fas fa-heart"></i><p>No interests added yet</p></div>';
+      }
+
+      // Populate goals
+      const goalsList = document.getElementById('goals-list');
+      if (userData.goals && userData.goals.length > 0) {
+        goalsList.innerHTML = userData.goals.map(goal => `
+          <div class="goal-item">
+            <div class="goal-title">${goal.title}</div>
+            <div class="goal-description">${goal.description}</div>
+            <div class="goal-progress">
+              <div class="goal-progress-bar" style="width: ${goal.progress || 0}%"></div>
+            </div>
+            <div class="goal-status">${goal.progress || 0}% Complete</div>
+          </div>
+        `).join('');
+      } else {
+        goalsList.innerHTML = '<div class="empty-state"><i class="fas fa-bullseye"></i><p>No goals set yet</p></div>';
+      }
+    }
+
+    function editProfile() {
+      // Redirect to settings page for profile editing
+      window.location.href = 'settings.html';
+    }
+
+    function clearProfileData() {
+      // Use the AuthAPI logout function
+      AuthAPI.logout();
+    }
+
+    // Set default avatar immediately
+    function setDefaultAvatar() {
+      const avatarImg = document.getElementById('profile-avatar-img');
+      avatarImg.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiByeD0iNjAiIGZpbGw9IiNGN0Y3RjciLz4KPGNpcmNsZSBjeD0iNjAiIGN5PSI0NSIgcj0iMTgiIGZpbGw9IiM2QjcyODAiLz4KPHBhdGggZD0iTTMwIDkwQzMwIDc1LjY0MDYgNDEuNjQwNiA2NCA1NiA2NEg2NEM3OC4zNTk0IDY0IDkwIDc1LjY0MDYgOTAgOTBWOTBIMzBaIiBmaWxsPSIjNkI3MjgwIi8+Cjwvc3ZnPgo=';
+    }
+
+    // Load profile data when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      setDefaultAvatar();
+      loadProfileData();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Academic Progress - EduDesk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #2d3151;
+      --accent: #ffe066;
+      --background: #f7f9fc;
+      --card-bg: #fff;
+      --text: #2c3e50;
+      --secondary: #0078d4;
+      --danger: #dc3545;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      margin: 0;
+      min-height: 100vh;
+    }
+    .navbar {
+      background: var(--primary);
+      width: 100%;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+    }
+    .navbar-logo {
+      height: 44px;
+      width: 44px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      border: 1px solid #eee;
+      margin: 0.5rem 0;
+    }
+    .navbar-links {
+      display: flex;
+      gap: 2.2rem;
+      align-items: center;
+    }
+    .navbar-link {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      letter-spacing: 0.01em;
+    }
+    .navbar-link:hover {
+      color: var(--accent);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .navbar-link.dashboard-btn {
+      background: var(--accent);
+      color: var(--primary);
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .navbar-link.dashboard-btn:hover {
+      background: #fff;
+      color: var(--primary);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    @media (max-width: 700px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 0.3rem;
+        min-height: unset;
+      }
+      .navbar-links {
+        gap: 1.2rem;
+        margin-top: 0.5rem;
+      }
+      .navbar-logo {
+        height: 32px;
+        width: 32px;
+      }
+    }
+    .container {
+      max-width: 520px;
+      margin: 2.5rem auto 0 auto;
+      background: var(--card-bg);
+      padding: 2rem 1.5rem 1.5rem 1.5rem;
+      border-radius: 18px;
+      box-shadow: 0 4px 14px rgba(44,49,80,0.10);
+    }
+    .container h1 {
+      color: var(--primary);
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 1.2rem;
+      margin-bottom: 0.3rem;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 8px;
+      border: 1.5px solid #e0e0e0;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: var(--text);
+      transition: border 0.2s;
+      margin-bottom: 1rem;
+    }
+    input:focus, textarea:focus {
+      border: 1.5px solid var(--accent);
+      outline: none;
+    }
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    button {
+      margin-top: 0.5rem;
+      padding: 0.8rem 1.5rem;
+      background-color: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #005ea2;
+    }
+    .progress-list {
+      margin-top: 2rem;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .progress-item {
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.1rem;
+      box-shadow: 0 1px 4px rgba(44,49,80,0.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .progress-info {
+      flex: 1;
+    }
+    .progress-title {
+      font-weight: 600;
+      color: var(--secondary);
+      margin-bottom: 0.2rem;
+    }
+    .progress-desc {
+      color: var(--text);
+      font-size: 1rem;
+    }
+    .delete-btn {
+      background: var(--danger);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.4rem 1rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-left: 0.5rem;
+    }
+    .delete-btn:hover {
+      background: #a71d2a;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 1.2rem 0.5rem 1rem 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <img src="The EDUDESK..png" alt="EduDesk Logo" class="navbar-logo" />
+    <div class="navbar-links">
+      <a href="dashboard.html" class="navbar-link dashboard-btn">Back to Dashboard</a>
+      <a href="compare.html" class="navbar-link">Compare</a>
+    </div>
+  </nav>
+  <div class="container">
+    <h1>Record Academic Progress</h1>
+    <label for="subject">Subject</label>
+    <input type="text" id="subject" placeholder="Subject">
+    <label for="progress">Progress</label>
+    <textarea id="progress" placeholder="Describe your recent progress..."></textarea>
+    <button onclick="saveProgress()">Save Progress</button>
+    <div class="progress-list" id="progress-list"></div>
+  </div>
+  <script>
+    function getProgress() {
+      return JSON.parse(localStorage.getItem('progress')) || [];
+    }
+    function saveProgressData(data) {
+      localStorage.setItem('progress', JSON.stringify(data));
+    }
+    function renderProgress() {
+      const data = getProgress();
+      const list = document.getElementById('progress-list');
+      list.innerHTML = '';
+      if (!data.length) {
+        list.innerHTML = '<div style="color:#aaa;text-align:center;">No progress entries yet. Add your first!</div>';
+        return;
+      }
+      data.forEach((p, i) => {
+        const div = document.createElement('div');
+        div.className = 'progress-item';
+        div.innerHTML = `<div class="progress-info"><div class="progress-title">${p.subject}</div><div class="progress-desc">${p.progress}</div></div><button class='delete-btn' onclick='deleteProgress(${i})'>Delete</button>`;
+        list.appendChild(div);
+      });
+    }
+    function saveProgress() {
+      const subject = document.getElementById('subject').value.trim();
+      const progress = document.getElementById('progress').value.trim();
+      if (!subject || !progress) {
+        alert('Please enter both a subject and progress.');
+        return;
+      }
+      const data = getProgress();
+      data.push({ subject, progress });
+      saveProgressData(data);
+      document.getElementById('subject').value = '';
+      document.getElementById('progress').value = '';
+      renderProgress();
+    }
+    function deleteProgress(idx) {
+      const data = getProgress();
+      data.splice(idx, 1);
+      saveProgressData(data);
+      renderProgress();
+    }
+    renderProgress();
+  </script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alarm & Reminders - EduDesk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2d3151;
+      --accent: #ffe066;
+      --background: #f4f6f9;
+      --card-bg: #fff;
+      --text: #2c3e50;
+      --danger: #dc3545;
+      --secondary: #ff8500;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      margin: 0;
+      line-height: 1.6;
+    }
+    .navbar {
+      background: var(--primary);
+      width: 100%;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .navbar-logo {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      border: 1px solid #eee;
+      margin: 0.5rem 0;
+    }
+    .navbar-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    .navbar-link {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.15rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      letter-spacing: 0.01em;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .navbar-link:hover {
+      color: var(--accent);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .navbar-link.dashboard-btn {
+      background: var(--accent);
+      color: var(--primary);
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .navbar-link.dashboard-btn:hover {
+      background: #fff;
+      color: var(--primary);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    @media (max-width: 700px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 0.3rem;
+        min-height: unset;
+      }
+      .navbar-links {
+        gap: 1.2rem;
+        margin-top: 0.5rem;
+      }
+      .navbar-logo {
+        height: 36px;
+        width: 36px;
+      }
+    }
+    .container {
+      max-width: 500px;
+      margin: 6rem auto 2.5rem auto;
+      padding: 0 1rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(44,49,80,0.08);
+      padding: 2rem 1.5rem 1.5rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.5px;
+    }
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    input[type="text"],
+    input[type="time"] {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      background: #f8fafc;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+      font-family: 'Inter', sans-serif;
+      transition: border 0.2s;
+    }
+    input[type="text"]:focus,
+    input[type="time"]:focus {
+      border: 1.5px solid var(--secondary);
+      outline: none;
+    }
+    .btn {
+      padding: 0.7rem 1.5rem;
+      background: var(--secondary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+    .btn:hover {
+      background: #e67a00;
+    }
+    .alarm-list {
+      margin-top: 1.5rem;
+      padding: 0;
+      list-style: none;
+    }
+    .alarm-item {
+      background: #f8fafc;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 4px rgba(44,49,80,0.04);
+    }
+    .alarm-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .alarm-time {
+      font-weight: 600;
+      color: var(--secondary);
+      font-size: 1.1rem;
+    }
+    .alarm-message {
+      font-size: 1rem;
+      color: var(--primary);
+    }
+    .delete-btn {
+      background: var(--danger);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.4rem 1rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .delete-btn:hover {
+      background: #b71c2b;
+    }
+    .empty-state {
+      text-align: center;
+      color: #b0b4c1;
+      padding: 1.5rem 0 0.5rem 0;
+      font-size: 1.1rem;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 0 0.2rem;
+      }
+      .card {
+        padding: 1.2rem 0.5rem 1rem 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <img src="The EDUDESK..png" alt="EduDesk Logo" class="navbar-logo" />
+    <div class="navbar-links">
+      <a href="dashboard.html" class="navbar-link dashboard-btn">Back to Dashboard</a>
+      <a href="study-timer.html" class="navbar-link">Study Timer</a>
+      <a href="goalset.html" class="navbar-link">Goals</a>
+      <a href="mood-tracker.html" class="navbar-link">Mood Tracker</a>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="card">
+      <div class="card-title">Add a Reminder</div>
+      <form id="alarmForm">
+        <div class="form-group">
+          <label for="message">Reminder Message</label>
+          <input type="text" id="message" required />
+        </div>
+        <div class="form-group">
+          <label for="time">Alarm Time</label>
+          <input type="time" id="time" required />
+        </div>
+        <button type="submit" class="btn">Set Reminder</button>
+      </form>
+    </div>
+    <div class="card">
+      <div class="card-title">Your Reminders</div>
+      <ul id="alarmList" class="alarm-list"></ul>
+    </div>
+  </div>
+  <audio id="alarmSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
+  <script>
+    const alarmForm = document.getElementById('alarmForm');
+    const alarmList = document.getElementById('alarmList');
+    const alarmSound = document.getElementById('alarmSound');
+    let alarms = JSON.parse(localStorage.getItem('edudeskAlarms') || '[]');
+
+    alarmForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const message = document.getElementById('message').value;
+      const time = document.getElementById('time').value;
+      if (message && time) {
+        alarms.push({ message, time });
+        localStorage.setItem('edudeskAlarms', JSON.stringify(alarms));
+        renderAlarms();
+        alarmForm.reset();
+      }
+    });
+
+    function renderAlarms() {
+      alarmList.innerHTML = '';
+      if (alarms.length === 0) {
+        alarmList.innerHTML = '<div class="empty-state">No reminders set yet.</div>';
+        return;
+      }
+      alarms.forEach((alarm, index) => {
+        const li = document.createElement('li');
+        li.className = 'alarm-item';
+        const info = document.createElement('div');
+        info.className = 'alarm-info';
+        const time = document.createElement('div');
+        time.className = 'alarm-time';
+        time.textContent = alarm.time;
+        const msg = document.createElement('div');
+        msg.className = 'alarm-message';
+        msg.textContent = alarm.message;
+        info.appendChild(time);
+        info.appendChild(msg);
+        const delBtn = document.createElement('button');
+        delBtn.className = 'delete-btn';
+        delBtn.textContent = 'Delete';
+        delBtn.onclick = () => {
+          alarms.splice(index, 1);
+          localStorage.setItem('edudeskAlarms', JSON.stringify(alarms));
+          renderAlarms();
+        };
+        li.appendChild(info);
+        li.appendChild(delBtn);
+        alarmList.appendChild(li);
+      });
+    }
+
+    function checkAlarms() {
+      const now = new Date();
+      const currentTime = now.toTimeString().slice(0, 5);
+      alarms.forEach((alarm, index) => {
+        if (alarm.time === currentTime) {
+          alert(`Reminder: ${alarm.message}`);
+          alarmSound.play();
+          alarms.splice(index, 1);
+          localStorage.setItem('edudeskAlarms', JSON.stringify(alarms));
+          renderAlarms();
+        }
+      });
+    }
+    setInterval(checkAlarms, 1000);
+    renderAlarms();
+  </script>
+</body>
+</html>

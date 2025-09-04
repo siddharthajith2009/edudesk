@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mood Journal AI Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f8fc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      width: 95%;
+      max-width: 600px;
+      background: white;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      background: #0078d4;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .chat-box {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+
+    .message {
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      max-width: 80%;
+    }
+
+    .user {
+      background: #dbeeff;
+      align-self: flex-end;
+      text-align: right;
+    }
+
+    .bot {
+      background: #f0f0f0;
+      align-self: flex-start;
+    }
+
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    .chat-input button {
+      background: #0078d4;
+      color: white;
+      border: none;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+   <nav style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: #0078d4; color: white; font-family: 'Inter', sans-serif;">
+  <div style="font-size: 1.5rem; font-weight: 600;">Elite Scheduler</div>
+  <div>
+    <a href="dashboard.html" style="text-decoration: none; background: white; color: #0078d4; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 500; transition: background 0.3s;">
+      Go to Dashboard
+    </a>
+  </div>
+</nav>
+
+  <div class="chat-container">
+    <div class="chat-header">🧠 Mood Journal AI Assistant</div>
+    <div class="chat-box" id="chat-box"></div>
+    <form class="chat-input" onsubmit="handleSend(event)">
+      <input type="text" id="user-input" placeholder="How are you feeling today?" required />
+      <button type="submit">Send</button>
+    </form>
+  </div>
+
+  <script>
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('user-input');
+
+    const responses = [
+      {
+        keywords: ["sad", "down", "upset"],
+        response: "I'm sorry to hear that. It might help to take a break, talk to a friend, or write in your journal. Would you like to do a breathing exercise?"
+      },
+      {
+        keywords: ["happy", "excited", "joyful"],
+        response: "That's wonderful to hear! Why not note this moment in your journal so you can remember it later?"
+      },
+      {
+        keywords: ["anxious", "worried", "stressed"],
+        response: "Anxiety is tough. Try taking 3 deep breaths with me: inhale... exhale... Remember, this moment will pass. Would you like some calming music?"
+      },
+      {
+        keywords: ["angry", "frustrated"],
+        response: "It's okay to feel angry sometimes. Would writing down what's bothering you help? I'm here to support you."
+      },
+      {
+        keywords: ["lonely"],
+        response: "You're not alone. Reaching out to someone or writing in your journal might help. Want a prompt to get started?"
+      }
+    ];
+
+    function appendMessage(text, type) {
+      const msg = document.createElement('div');
+      msg.className = `message ${type}`;
+      msg.innerText = text;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function handleSend(e) {
+      e.preventDefault();
+      const text = userInput.value.trim();
+      if (!text) return;
+
+      appendMessage(text, 'user');
+      userInput.value = '';
+
+      const lowerText = text.toLowerCase();
+      let response = "Thanks for sharing. Want to write about it in your Journal Vault?";
+
+      for (const entry of responses) {
+        if (entry.keywords.some(k => lowerText.includes(k))) {
+          response = entry.response;
+          break;
+        }
+      }
+
+      setTimeout(() => appendMessage(response, 'bot'), 600);
+    }
+  </script>
+</body>
+</html>

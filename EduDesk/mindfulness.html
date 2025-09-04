@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mindfulness & Wellness - EduDesk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #2d3151;
+      --accent: #ffe066;
+      --background: #f4f6f9;
+      --card-bg: #fff;
+      --text: #2c3e50;
+      --secondary: #ff8500;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      margin: 0;
+      min-height: 100vh;
+    }
+    .navbar {
+      background: var(--primary);
+      width: 100%;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+    }
+    .navbar-logo {
+      height: 48px;
+      width: 48px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      border: 1px solid #eee;
+      margin: 0.5rem 0;
+    }
+    .navbar-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    .navbar-link {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.15rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      letter-spacing: 0.01em;
+    }
+    .navbar-link:hover {
+      color: var(--accent);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .navbar-link.dashboard-btn {
+      background: var(--accent);
+      color: var(--primary);
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .navbar-link.dashboard-btn:hover {
+      background: #fff;
+      color: var(--primary);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    @media (max-width: 700px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 0.3rem;
+        min-height: unset;
+      }
+      .navbar-links {
+        gap: 1.2rem;
+        margin-top: 0.5rem;
+      }
+      .navbar-logo {
+        height: 36px;
+        width: 36px;
+      }
+    }
+    .container {
+      max-width: 420px;
+      margin: 2.5rem auto;
+      padding: 0 1rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(44,49,80,0.10);
+      text-align: center;
+      padding: 2.5rem 2rem 2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.5px;
+    }
+    .circle {
+      width: 150px;
+      height: 150px;
+      background-color: #cce5ff;
+      border-radius: 50%;
+      margin: 20px auto 0 auto;
+      animation: breathe 8s ease-in-out infinite;
+      box-shadow: 0 2px 12px rgba(44,49,80,0.08);
+    }
+    @keyframes breathe {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.5); }
+      100% { transform: scale(1); }
+    }
+    .breathe-text {
+      margin-top: 1.2rem;
+      font-size: 1.1rem;
+      color: var(--secondary);
+      font-weight: 500;
+    }
+    .quote {
+      margin-top: 1.5rem;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: #555;
+      min-height: 48px;
+      transition: color 0.2s;
+    }
+    .btn {
+      margin-top: 1.5rem;
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      background-color: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background-color: #e67a00;
+    }
+    audio {
+      margin-top: 1.5rem;
+      width: 100%;
+      outline: none;
+      border-radius: 8px;
+      background: #f8fafc;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 0 0.2rem;
+      }
+      .card {
+        padding: 1.2rem 0.5rem 1rem 0.5rem;
+      }
+      .circle {
+        width: 110px;
+        height: 110px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <img src="The EDUDESK..png" alt="EduDesk Logo" class="navbar-logo" />
+    <div class="navbar-links">
+      <a href="dashboard.html" class="navbar-link dashboard-btn">Back to Dashboard</a>
+      <a href="study-timer.html" class="navbar-link">Study Timer</a>
+      <a href="goalset.html" class="navbar-link">Goals</a>
+      <a href="mood-tracker.html" class="navbar-link">Mood Tracker</a>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="card">
+      <div class="card-title">🧘‍♂️ Mindfulness & Wellness</div>
+      <div class="circle"></div>
+      <div class="breathe-text">Breathe in... Hold... Breathe out...</div>
+      <div class="quote" id="quote">"Calm mind brings inner strength." – Dalai Lama</div>
+      <button class="btn" onclick="getQuote()">Get New Quote</button>
+      <audio controls loop>
+        <source src="https://cdn.pixabay.com/audio/2022/08/18/audio_85e2fd96a6.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+  </div>
+  <script>
+    const quotes = [
+      "“You should sit in meditation for 20 minutes a day — unless you're too busy. Then you should sit for an hour.” — Zen proverb",
+      "“Don't believe everything you think.” — Byron Katie",
+      "“Almost everything will work again if you unplug it for a few minutes… including you.” — Anne Lamott",
+      "“Feelings come and go like clouds in a windy sky. Conscious breathing is my anchor.” — Thich Nhat Hanh",
+      "“Quiet the mind, and the soul will speak.” — Ma Jaya Sati Bhagavati",
+      "\t“It is health that is real wealth and not pieces of gold and silver.” — Mahatma Gandhi",
+      "“Take care of your body. It's the only place you have to live.” — Jim Rohn",
+      "“Happiness is not something ready made. It comes from your own actions.” — Dalai Lama",
+      "“To keep the body in good health is a duty… otherwise we shall not be able to keep our mind strong and clear.” — Buddha",
+      "“Self-care is how you take your power back.” — Lalah Delia",
+      "“You can't pour from an empty cup. Take care of yourself first.” — Norm Kelly",
+      "“Health is a state of body. Wellness is a state of being.” — J. Stanford",
+      "“Wellness encompasses a healthy body, a sound mind, and a tranquil spirit.” — Terri Guillemets",
+      "“Keeping your body healthy is an expression of gratitude to the whole cosmos.” — Thich Nhat Hanh",
+      "“Almost everything will work again if you unplug it for a few minutes, including you.” — Anne Lamott",
+      "“The greatest wealth is health.” — Virgil",
+      "“Calm mind brings inner strength and self-confidence.” — Dalai Lama",
+      "“Sleep is the best meditation.” — Dalai Lama",
+      "“An ounce of prevention is worth a pound of cure.” — Benjamin Franklin",
+      "“He who has health has hope; and he who has hope has everything.” — Arab Proverb",
+      "“Mental health needs a great deal of attention. It's the final taboo.” — Adam Ant",
+      "“Happiness lies first of all in health.” — George William Curtis",
+      "“Take rest; a field that has rested gives a bountiful crop.” — Ovid",
+      "“Nurturing yourself is not selfish—it's essential to your survival and your well-being.” — Renée Peterson Trudeau",
+      "“Health isn't just about what you eat. It's also about what you think and say.” — Unknown",
+      "“The part can never be well unless the whole is well.” — Plato",
+      "“Every day is a new beginning. Take a deep breath, smile, and start again.” — Unknown",
+      "“Caring for myself is not self-indulgence, it is self-preservation.” — Audre Lorde",
+      "“A healthy outside starts from the inside.” — Robert Urich",
+      "“Wellness is the natural state of my body.” — Louise Hay",
+      "“When you recover or discover something that nourishes your soul and brings joy, care enough about yourself to make room for it.” — Jean Shinoda Bolen",
+      "“The mind and body are not separate. What affects one, affects the other.” — Unknown",
+      "“You are not a drop in the ocean. You are the entire ocean in a drop.” — Rumi",
+      "“True silence is the rest of the mind.” — William Penn",
+      "“The soul always knows what to do to heal itself. The challenge is to silence the mind.” — Caroline Myss",
+      "Well-being cannot exist just in your own head. Well-being is a combination of feeling good as well as actually having meaning, good relationships, and accomplishment.” — Martin Seligman",
+      "“A calm and modest life brings more happiness than the pursuit of success combined with constant restlessness.” — Albert Einstein",
+      "“Don't sacrifice yourself too much, because if you sacrifice too much there's nothing else you can give.” — Karl Lagerfeld",
+      "“Laughter is a tranquilizer with no side effects.” — Arnold H. Glasow",
+      "“A good laugh and a long sleep are the best cures in the doctor's book.” — Irish Proverb",
+      "“In a disordered mind, as in a disordered body, soundness of health is impossible.” — Cicero",
+      "“Let food be thy medicine and medicine be thy food.” — Hippocrates",
+      "“Mindfulness isn't difficult, we just need to remember to do it.” — Sharon Salzberg",
+      "“We can't control everything. But we can control how we take care of ourselves.” — Unknown",
+      "“The more you praise and celebrate your life, the more there is in life to celebrate.” — Oprah Winfrey",
+      "“True health infuses positive energy in the mind, body, and spirit.” — Unknown",
+      "“Balance is not something you find, it's something you create.” — Jana Kingsford",
+      "“Breathe. Let go. And remind yourself that this very moment is the only one you know you have for sure.” — Oprah Winfrey",
+      "“You only have one body. Take care of it.” — Jack LaLanne",
+      "“You, yourself, as much as anybody in the entire universe, deserve your love and affection.” — Buddha",
+      "“The best six doctors anywhere: sunshine, water, rest, air, exercise, and diet.” — Wayne Fields",
+      "“Nourish to flourish.” — Unknown",
+      "“Healing is an art. It takes time, it takes practice. It takes love.” — Maza Dohta",
+      "“When we are no longer able to change a situation, we are challenged to change ourselves.” — Viktor Frankl",
+      "“Gratitude is the healthiest of all human emotions.” — Zig Ziglar",
+      "“The ability to be in the present moment is a major component of mental wellness.” — Abraham Maslow",
+      "“Don't let your struggle become your identity.” — Unknown",
+      "“Your body hears everything your mind says.” — Naomi Judd",
+      "“Meditation is a vital way to purify and quiet the mind, thus rejuvenating the body.” — Deepak Chopra",
+      "“Self-care is not a waste of time; self-care makes your use of time more sustainable.” — Jackie Viramontez",
+      "“What mental health needs is more sunlight, more candor, and more unashamed conversation.” — Glenn Close",
+      "“The groundwork for all happiness is good health.” — Leigh Hunt",
+      "“The time to relax is when you don't have time for it.” — Sydney J. Harris",
+      "“Sometimes the most important thing in a whole day is the rest we take between two deep breaths.” — Etty Hillesum",
+      "“Almost everything is better after a good nap, a walk, or a glass of water.” — Unknown",
+      "“Physical fitness is the first requisite of happiness.” — Joseph Pilates",
+      "“Be kind to your mind.” — Unknown",
+      "“Nurture your mind with great thoughts.” — Benjamin Disraeli",
+      "“One small positive thought in the morning can change your whole day.” — Dalai Lama",
+      "“Embrace uncertainty. Some of the most beautiful chapters in our lives won't have a title until much later.” — Bob Goff",
+      "“You can't control the waves, but you can learn to surf.” — Jon Kabat-Zinn",
+      "“Don't underestimate the power of a deep breath.” — Unknown",
+      "“Taking care of yourself doesn't mean me first, it means me too.” — L.R. Knost",
+      "“Keep looking up… that's the secret of life.” — Snoopy (Charles M. Schulz)",
+      "“Being healthy and fit isn't a fad or a trend, it's a lifestyle.” — Unknown",
+      "“Rest and self-care are so important. When you take time to replenish your spirit, it allows you to serve others from the overflow.” — Eleanor Brownn",
+      "“Make your mental health a priority.” — Unknown",
+      "“Joy is a net of love by which you can catch souls.” — Mother Teresa",
+      "“Everything you need, your courage, strength, compassion, and love; everything you need is already within you.” — Unknown",
+      "“When the heart is at ease, the body is healthy.” — Chinese Proverb",
+      "“You are allowed to be both a masterpiece and a work in progress.” — Sophia Bush",
+      "“The only journey is the journey within.” — Rainer Maria Rilke",
+      "“Being in control of your life and having realistic expectations about your day-to-day challenges are the keys to stress management.” — Marilu Henner",
+      "“Good humor is a tonic for mind and body.” — Grenville Kleiser",
+      "“Give your stress wings and let it fly away.” — Terri Guillemets",
+      "“Self-care is giving the world the best of you, instead of what's left of you.” — Katie Reed",
+      "“Time and health are two precious assets that we don't recognize and appreciate until they have been depleted.” — Denis Waitley",
+      "“Your health is an investment, not an expense.” — Unknown",
+      "“Just when the caterpillar thought the world was over, it became a butterfly.” — Proverb",
+      "“Inhale confidence, exhale doubt.” — Unknown",
+      "“You were never created to live depressed, defeated, guilty, condemned, ashamed, or unworthy.” — Joel Osteen",
+      "“A quiet mind is able to hear intuition over fear.” — Yvan Byeajee",
+      "“Simplicity is the ultimate sophistication.” — Leonardo da Vinci",
+      "“Live in the sunshine, swim in the sea, drink the wild air.” — Ralph Waldo Emerson",
+      "“Take time to do what makes your soul happy.” — Unknown",
+      "“You don't have to control your thoughts. You just have to stop letting them control you.” — Dan Millman",
+      "“Joy is not in things; it is in us.” — Richard Wagner",
+      "“Sometimes you just need to disconnect and enjoy your own company.” — Unknown",
+      "“The present moment is filled with joy and happiness. If you are attentive, you will see it.” — Thich Nhat Hanh",
+      "“Your wellbeing matters. You matter.” — Unknown",
+    ];
+    function getQuote() {
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById("quote").textContent = quote;
+    }
+  </script>
+</body>
+</html>
